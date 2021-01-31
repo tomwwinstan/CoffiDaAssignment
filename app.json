@@ -1,0 +1,12 @@
+{
+  "name": "CoffiDaAssignment",
+  "displayName": "CoffiDaAssignment",
+  "expo": {
+    "name": "CoffiDaAssignment",
+    "slug": "CoffiDaAssignment",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
