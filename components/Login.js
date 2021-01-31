@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
       },
       inputText:{
         height:50,
-        color:"white"
+        color:"#38220f"
       },
       loginBtn:{
         width:"80%",
