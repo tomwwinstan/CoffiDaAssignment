@@ -1,6 +1,8 @@
 import  React, { Component } from 'react';
-import { StyleSheet, ScrollView, Text, TextInput, View, TouchableOpacity, Alert } from 'react-native';
+import { StyleSheet, ScrollView, Text, TextInput, View, TouchableOpacity } from 'react-native';
 import axios from 'axios';
+
+import SignUp from './SignUp'
 
 class Login extends Component {
   constructor(props) {
@@ -27,9 +29,11 @@ class Login extends Component {
     }
 
     render() {
+
+      const navigation = this.props.navigation;
+
         return (
-          <View>
-            <ScrollView contentContainerStyle={{flexGrow: 1, justifyContent: 'center', alignItems: 'center'}}>
+            <ScrollView contentContainerStyle={{flexGrow: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#967259'}}>
                 <Text style={styles.title}>CoffiDa</Text>
                 <View style={styles.inputView}>
                     <TextInput placeholder="Email"
@@ -45,11 +49,11 @@ class Login extends Component {
                                   onPress={this.login}>
                     <Text style={styles.loginText}>Login</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.loginBtn}>
+                <TouchableOpacity style={styles.loginBtn}
+                onPress={() => navigation.navigate('SignUp')}>
                     <Text style={styles.loginText}>Signup</Text>
                 </TouchableOpacity>
             </ScrollView>
-          </View>
         )
     }
     
