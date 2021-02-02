@@ -1,19 +1,49 @@
-import React from 'react';
-import { StyleSheet, View } from 'react-native';
-import Login from './components/Login';
+import 'react-native-gesture-handler';
 
-export default function App() {
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+
+import Ionicons from 'react-native-vector-icons/Ionicons'
+
+import Home from './components/Home'
+import Search from './components/Search'
+import Camera from './components/Camera'
+import Profile from './components/Profile'
+
+const Tab = createBottomTabNavigator();
+
+export default function AppNav() {
   return (
-    <View style={styles.container}>
-      <Login/>
-    </View>
+    <NavigationContainer>
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
+            tabBarIcon: ({ focused, colour, size }) => {
+                let iconName;
+
+                if (route.name === 'Home') {
+                    iconName = focused ? 'home' : 'home-outline';
+                } else if (route.name === 'Search') {
+                    iconName = focused ? 'search' : 'search-outline';
+                } else if (route.name === 'Camera') {
+                    iconName = focused ? 'camera' : 'camera-outline';
+                } else if (route.name === 'Profile') {
+                    iconName = focused ? 'man' : 'man-outline';
+                } 
+
+                return <Ionicons name={iconName} size={size} color={colour}/>;
+            },
+        })}
+        tabBarOptions={{
+            activeTintColor: 'tomato',
+            inactiveTintColor: 'gray',
+        }}
+      >
+          <Tab.Screen name ="Home" component={Home}/>
+          <Tab.Screen name ="Search" component={Search}/>
+          <Tab.Screen name ="Camera" component={Camera}/>
+          <Tab.Screen name ="Profile" component={Profile}/>
+      </Tab.Navigator>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#967259',
-    justifyContent: 'center'
-  },
-});
