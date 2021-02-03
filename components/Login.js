@@ -1,8 +1,6 @@
 import  React, { Component } from 'react';
-import { StyleSheet, ScrollView, Text, TextInput, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, ScrollView, Text, TextInput, View, TouchableOpacity, Image } from 'react-native';
 import axios from 'axios';
-
-import SignUp from './SignUp'
 
 class Login extends Component {
   constructor(props) {
@@ -11,7 +9,7 @@ class Login extends Component {
     this.state = {
       email:"",
       password:"",
-      auth: ""
+      token: ""
     }
   }
 
@@ -22,7 +20,9 @@ class Login extends Component {
       })
       .then((response) => {
         console.log(response.data)
-        this.state.auth = response.data.token
+        this.state.token = response.data.token
+        console.log(this.state.token)
+        // navigation.navigate('ProfileDetails', { id: response.data.id, token: response.data.token})
       }, (error) => {
         console.log(error)
       })
@@ -34,7 +34,9 @@ class Login extends Component {
 
         return (
             <ScrollView contentContainerStyle={{flexGrow: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#967259'}}>
-                <Text style={styles.title}>CoffiDa</Text>
+
+                <Image style ={styles.logo}
+                source={require('../img/logo.png')} />
                 <View style={styles.inputView}>
                     <TextInput placeholder="Email"
                     style={styles.inputText}
@@ -60,18 +62,17 @@ class Login extends Component {
 }
 
 const styles = StyleSheet.create({
-      title:{
-        fontWeight:"bold",
-        fontSize:50,
-        color:"#ece0d1",
-        marginBottom:40
+      logo: {
+        resizeMode: "stretch",
+        height: 250,
+        width: 250
       },
       inputView:{
         width:"80%",
         backgroundColor:"#dbc1ac",
         borderRadius:20,
         height:50,
-        marginBottom:20,
+        marginBottom:10,
         justifyContent:"center",
         padding:20
       },
@@ -86,8 +87,8 @@ const styles = StyleSheet.create({
         height:50,
         alignItems:"center",
         justifyContent:"center",
-        marginTop:40,
-        marginBottom:10
+        marginTop:20,
+        marginBottom:5
       },
       loginText:{
         color:"white"

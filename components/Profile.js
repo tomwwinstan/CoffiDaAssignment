@@ -1,13 +1,30 @@
 import  React, { Component } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import Login from './Login';
+import { createStackNavigator } from '@react-navigation/stack';
+import SignUp from './SignUp';
+import ProfileDetails from './ProfileDetails';
 
 class Profile extends Component {
+    // constructor(props) {
+    //     this.state = {
+    //         auth: ""
+    //     }
+    // }
+
+    // login = () => {
+    //     if()
+    // }
     render() {
+
+        const Stack = createStackNavigator();
+
         return(
-            <View style={styles.container}>
-                <Login/>
-            </View>
+            <Stack.Navigator>
+                <Stack.Screen name="Login" component={Login}></Stack.Screen>
+                <Stack.Screen name="SignUp" component={SignUp}></Stack.Screen>
+                <Stack.Screen name="ProfileDetails" component={ProfileDetails}></Stack.Screen>
+            </Stack.Navigator>
         )
     }
 }
