@@ -1,5 +1,5 @@
 import  React, { Component } from 'react';
-import { StyleSheet, ScrollView, View, TextInput, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, ScrollView, View, TextInput, Text, TouchableOpacity, Alert } from 'react-native';
 import axios from 'axios';
 
 class SignUp extends Component {
@@ -22,12 +22,13 @@ class SignUp extends Component {
         this.state.auth = response.data.token
       }, (error) => {
         console.log(error)
+        Alert.alert("Hello")
       })
     }
 
     render() {
         return (
-            <ScrollView contentContainerStyle={{flexGrow: 1, justifyContent: 'center', alignItems: 'center'}}> 
+            <ScrollView contentContainerStyle={{flexGrow: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#967259'}}> 
                 <Text style={styles.title}>Register</Text>
                 <View style={styles.inputView}>
                     <TextInput placeholder="First Name"

@@ -10,6 +10,7 @@ import Home from './components/Home'
 import Search from './components/Search'
 import Camera from './components/Camera'
 import Profile from './components/Profile'
+import { setStatusBarBackgroundColor } from 'expo-status-bar';
 
 const Tab = createBottomTabNavigator();
 
@@ -35,7 +36,7 @@ export default function AppNav() {
             },
         })}
         tabBarOptions={{
-            activeTintColor: 'tomato',
+            activeTintColor: '#967259',
             inactiveTintColor: 'gray',
         }}
       >
