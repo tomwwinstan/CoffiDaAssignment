@@ -1,6 +1,7 @@
 import  React, { Component } from 'react';
 import { StyleSheet, ScrollView, Text, TextInput, View, TouchableOpacity, Image } from 'react-native';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 class Login extends Component {
   constructor(props) {
@@ -9,56 +10,65 @@ class Login extends Component {
     this.state = {
       email:"",
       password:"",
-      token: ""
+      id: ""
     }
   }
 
-    login = () => {
-      axios.post('http://10.0.2.2:3333/api/1.0.0/user/login', {
-        email: this.state.email,
-        password: this.state.password
-      })
-      .then((response) => {
-        console.log(response.data)
-        this.state.token = response.data.token
-        console.log(this.state.token)
-        // navigation.navigate('ProfileDetails', { id: response.data.id, token: response.data.token})
-      }, (error) => {
-        console.log(error)
-      })
-    }
+  login = () => {
+    axios.post('http://10.0.2.2:3333/api/1.0.0/user/login', {
+      email: this.state.email,
+      password: this.state.password
+    })
+    .then((response) => {
+      storeData(response.data.token)
+      this.setState({ id:response.data.id })
+      this.move()
+    }, (error) => {
+      console.log(error)
+    })
+  }
 
-    render() {
+  move = () => {
+    const navigation = this.props.navigation;
+    navigation.navigate('ProfileDetails', {id: this.state.id})
+  }
 
-      const navigation = this.props.navigation;
+  render() {
+    const navigation = this.props.navigation;
+    return (
+      <ScrollView contentContainerStyle={{flexGrow: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#967259'}}>
+        <Image style ={styles.logo}
+        source={require('../img/logo.png')} />
+        <View style={styles.inputView}>
+          <TextInput placeholder="Email"
+          style={styles.inputText}
+          onChangeText={text => this.setState({email:text})}/>
+        </View>
+        <View style={styles.inputView}>
+          <TextInput placeholder="Password"
+          style={styles.inputText}
+          onChangeText={text => this.setState({password:text})}/>
+        </View>
+        <TouchableOpacity style={styles.loginBtn}
+        onPress={this.login}>
+          <Text style={styles.loginText}>Login</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.loginBtn}
+        onPress={() => navigation.navigate('SignUp')}>
+          <Text style={styles.loginText}>Signup</Text>
+        </TouchableOpacity>
+      </ScrollView>
+      )
+  }
+}
 
-        return (
-            <ScrollView contentContainerStyle={{flexGrow: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#967259'}}>
-
-                <Image style ={styles.logo}
-                source={require('../img/logo.png')} />
-                <View style={styles.inputView}>
-                    <TextInput placeholder="Email"
-                    style={styles.inputText}
-                    onChangeText={text => this.setState({email:text})}/>
-                </View>
-                <View style={styles.inputView}>
-                    <TextInput placeholder="Password"
-                    style={styles.inputText}
-                    onChangeText={text => this.setState({password:text})}/>
-                </View>
-                <TouchableOpacity style={styles.loginBtn}
-                                  onPress={this.login}>
-                    <Text style={styles.loginText}>Login</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.loginBtn}
-                onPress={() => navigation.navigate('SignUp')}>
-                    <Text style={styles.loginText}>Signup</Text>
-                </TouchableOpacity>
-            </ScrollView>
-        )
-    }
-    
+const storeData = async (auth) => {
+  try {
+    await AsyncStorage.setItem('@auth_key', auth)
+    console.log('Auth key stored')
+  } catch (e) {
+    console.log(e)
+  }
 }
 
 const styles = StyleSheet.create({
