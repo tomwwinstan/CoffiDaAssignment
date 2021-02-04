@@ -63,7 +63,6 @@ const styles = StyleSheet.create({
     loginContainer: {
         flex: 1,
         alignItems: 'center',
-        // justifyContent: 'center',
       },
       title:{
         fontWeight:"bold",
