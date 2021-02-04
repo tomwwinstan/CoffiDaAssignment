@@ -1,13 +1,17 @@
 import  React, { Component } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import ProfileDetails from './ProfileDetails';
+import { StyleSheet } from 'react-native';
+import { createStackNavigator } from '@react-navigation/stack';
+
+import AllLocations from './AllLocations';
 
 class Home extends Component {
     render() {
+        const Stack = createStackNavigator();
+
         return(
-            <View style={styles.container}>
-                <Text style={styles.title}>Home</Text>
-            </View>
+            <Stack.Navigator>
+                <Stack.Screen name="AllLocations" component={AllLocations}></Stack.Screen>
+            </Stack.Navigator>
         )
     }
 }

@@ -1,5 +1,5 @@
 import  React, { Component } from 'react';
-import { View, Text, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import axios from 'axios';
 
 class ProfileDetails extends Component {
