@@ -2,43 +2,52 @@ import  React, { Component } from 'react';
 import { View, Text, ActivityIndicator, StyleSheet, FlatList } from 'react-native';
 import { Divider, Rating } from 'react-native-elements';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 class AllLocations extends Component {
     constructor(props) {
         super(props);
     
         this.state = {
+            authKey: '',
             isLoading: false,
-            isLoadingMore: false,
             locations:[],
-            latitude: "",
             id: ""
         }
     }
 
-    getAllLocations = async () => {
+    getData = async() => {
+        try {
+            this.state.authKey = await AsyncStorage.getItem('@auth_key')
+            this.getAllLocations()
+        } catch(e) {
+            console.log(e)
+        }
+    }
+
+    getAllLocations = () => {
         this.setState({ isLoading:true });
         axios.get('http://10.0.2.2:3333/api/1.0.0/find', {headers: {
-            'X-Authorization': 'accb8973c5edaef3d86a37e2a3f85329'}
+            'X-Authorization': this.state.authKey}
         })
-    .then((response) => {
-        console.log(response.data)
-        this.setState({
-            isLoading: false,
-            locations: response.data
+        .then((response) => {
+            console.log('Got location data')
+            this.setState({
+                isLoading: false,
+                locations: response.data
+                })
             })
-        })
-    .catch((error) => {
-        console.log(error)
+        .catch((error) => {
+            console.log('ah' + error)
         })
     }
 
     componentDidMount() {
-        this.getAllLocations();
+        this.getData()
     }
 
     render() {
-        if(this.state.isLoading) {
+        if (this.state.isLoading) {
             return (
                 <View>
                     <ActivityIndicator size="large" />
@@ -69,10 +78,10 @@ function Location(props) {
             <Text style={locationStyles.text_title}>{props.data.location_name}</Text>
             <Text style={locationStyles.text_body}>{props.data.location_town}</Text>
             <View>
-                <Text>Average Rating  <Rating imageSize={20} readonly fractions="{1}" startingValue={props.data.avg_overall_rating} style={locationStyles.rating}/></Text>
-                <Text>Average Price Rating  <Rating imageSize={20} readonly fractions="{1}" startingValue={props.data.avg_price_rating} style={locationStyles.rating}/></Text>
-                <Text>Average Quality Rating  <Rating imageSize={20} readonly fractions="{1}" startingValue={props.data.avg_quality_rating} style={locationStyles.rating}/></Text>
-                <Text>Average Cleanliness Rating  <Rating imageSize={20} readonly fractions="{1}" startingValue={props.data.avg_clenliness_rating} style={locationStyles.rating}/></Text>
+                <Text>Average Rating  <Rating imageSize={20} readonly fractions='1' startingValue={props.data.avg_overall_rating} style={locationStyles.rating}/></Text>
+                <Text>Average Price Rating  <Rating imageSize={20} readonly fractions='1' startingValue={props.data.avg_price_rating} style={locationStyles.rating}/></Text>
+                <Text>Average Quality Rating  <Rating imageSize={20} readonly fractions='1' startingValue={props.data.avg_quality_rating} style={locationStyles.rating}/></Text>
+                <Text>Average Cleanliness Rating  <Rating imageSize={20} readonly fractions='1' startingValue={props.data.avg_clenliness_rating} style={locationStyles.rating}/></Text>
             </View>
         </View>
     )
@@ -108,6 +117,7 @@ const locationStyles = StyleSheet.create({
         paddingLeft: 5
     },
     text_title: {
+        fontWeight:"bold",
         fontSize: 25,
         color: '#38220f'
     },

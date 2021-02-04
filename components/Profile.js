@@ -6,15 +6,6 @@ import SignUp from './SignUp';
 import ProfileDetails from './ProfileDetails';
 
 class Profile extends Component {
-    // constructor(props) {
-    //     this.state = {
-    //         auth: ""
-    //     }
-    // }
-
-    // login = () => {
-    //     if()
-    // }
     render() {
 
         const Stack = createStackNavigator();
