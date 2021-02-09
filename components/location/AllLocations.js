@@ -1,8 +1,9 @@
 import  React, { Component } from 'react';
 import { View, Text, ActivityIndicator, StyleSheet, FlatList } from 'react-native';
-import { Divider, Rating } from 'react-native-elements';
+import { Divider } from 'react-native-elements';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Location from './Location';
 
 class AllLocations extends Component {
     constructor(props) {
@@ -63,28 +64,13 @@ class AllLocations extends Component {
                             <Location data={item}/>
                     )}
                     ItemSeparatorComponent={() => <Divider style={styles.divider} />}
-                    keyExtractor={({id}, index) => id}
+                    keyExtractor={(item,index) => item.location_id.toString()}
                     />
                 </View>
             )
         }
         
     }
-}
-
-function Location(props) {
-    return(
-        <View style={locationStyles.location_container}>
-            <Text style={locationStyles.text_title}>{props.data.location_name}</Text>
-            <Text style={locationStyles.text_body}>{props.data.location_town}</Text>
-            <View>
-                <Text>Average Rating  <Rating imageSize={20} readonly fractions='1' startingValue={props.data.avg_overall_rating} style={locationStyles.rating}/></Text>
-                <Text>Average Price Rating  <Rating imageSize={20} readonly fractions='1' startingValue={props.data.avg_price_rating} style={locationStyles.rating}/></Text>
-                <Text>Average Quality Rating  <Rating imageSize={20} readonly fractions='1' startingValue={props.data.avg_quality_rating} style={locationStyles.rating}/></Text>
-                <Text>Average Cleanliness Rating  <Rating imageSize={20} readonly fractions='1' startingValue={props.data.avg_clenliness_rating} style={locationStyles.rating}/></Text>
-            </View>
-        </View>
-    )
 }
 
 const styles = StyleSheet.create({
@@ -109,24 +95,5 @@ const styles = StyleSheet.create({
         marginHorizontal: 16,
       }
 });
-
-const locationStyles = StyleSheet.create({
-    location_container: {
-        flex: 1,
-        backgroundColor: '#dbc1ac',
-        paddingLeft: 5
-    },
-    text_title: {
-        fontWeight:"bold",
-        fontSize: 25,
-        color: '#38220f'
-    },
-    text_body: {
-        fontSize: 18,
-    },
-    rating: {
-        
-    }
-})
 
 export default AllLocations;

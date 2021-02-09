@@ -16,8 +16,10 @@ class Login extends Component {
 
   login = () => {
     axios.post('http://10.0.2.2:3333/api/1.0.0/user/login', {
-      email: this.state.email,
-      password: this.state.password
+      // email: this.state.email,
+      // password: this.state.password
+      email: 'tomwin@mmu.ac.uk',
+      password: 'hello123'
     })
     .then((response) => {
       storeData(response.data.token)
