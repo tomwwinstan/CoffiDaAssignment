@@ -2,7 +2,7 @@ import  React, { Component } from 'react';
 import { StyleSheet } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import AllLocations from './AllLocations';
+import AllLocations from './location/AllLocations';
 
 class Home extends Component {
     render() {
