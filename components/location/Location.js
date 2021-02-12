@@ -31,12 +31,9 @@ class Location extends Component {
         }
     }
 
-    like = async() => {
-        console.log(this.state.authKey)
-        const token = this.state.authKey.toString()
-        console.log("HERE", token)
-        axios.post('http://10.0.2.2:3333/api/1.0.0/location/' + this.state.id + '/favourite', { headers: {
-            "X-Authorization": token }
+    likeLocation = () => {
+        axios.post('http://10.0.2.2:3333/api/1.0.0/location/' + this.state.id + '/favourite', { }, { headers: {
+            "X-Authorization": this.state.authKey } 
         })
         .then((response) => {
             console.log(response)
@@ -45,16 +42,16 @@ class Location extends Component {
         })
     }
 
-    // unlike = () => {
-    //     axios.delete('http://10.0.2.2:3333/api/1.0.0/location/' + this.state.id + '/favourite', { headers: {
-    //         'X-Authorization': this.state.authKey }
-    //     })
-    //     .then((response) => {
-    //         console.log(response)
-    //     }, (error) => {
-    //         console.log(error)
-    //     })
-    // }
+    unlike = () => {
+        axios.delete('http://10.0.2.2:3333/api/1.0.0/location/' + this.state.id + '/favourite', { headers: {
+            'X-Authorization': this.state.authKey }
+        })
+        .then((response) => {
+            console.log(response)
+        }, (error) => {
+            console.log(error)
+        })
+    }
 
     componentDidMount() {
         this.getData()
@@ -67,11 +64,11 @@ class Location extends Component {
                 <Text style={locationStyles.text_body}>{this.state.town}</Text>
                 <View>
                     <TouchableOpacity style={locationStyles.likeBtn}
-                        onPress={this.like}
+                        onPress={this.likeLocation}
                     ><Text style={locationStyles.likeText}>Like</Text></TouchableOpacity>
-                    {/* <TouchableOpacity style={locationStyles.likeBtn}
+                    <TouchableOpacity style={locationStyles.likeBtn}
                         onPress={this.unlike}
-                    ><Text style={locationStyles.likeText}>UnLike</Text></TouchableOpacity> */}
+                    ><Text style={locationStyles.likeText}>UnLike</Text></TouchableOpacity>
                 </View>
                 <View>
                     <Text>Average Rating  <Rating imageSize={20} readonly fractions={1} startingValue={this.state.avg_overall_rating} style={locationStyles.rating}/></Text>

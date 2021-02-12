@@ -1,5 +1,6 @@
 import  React, { Component } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, FlatList } from 'react-native';
+import { Divider } from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
@@ -66,7 +67,6 @@ class ProfileDetails extends Component {
                                 <Text style={styles.textResults}>{item.location_name} : {item.location_town}</Text>
                             </View>
                         )}
-                        ItemSeparatorComponent={() => <Divider style={locationStyles.divider} />}
                         keyExtractor={(item,index) => item.location_id.toString()}
                         />
                     </View>
