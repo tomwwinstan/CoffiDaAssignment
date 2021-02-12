@@ -1,5 +1,5 @@
 import  React, { Component } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator, FlatList } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
@@ -33,12 +33,11 @@ class ProfileDetails extends Component {
             'X-Authorization': this.state.authKey}
         })
         .then((response) => {
-            console.log(response.data)
+            console.log('Got personal details for id ' + id)
             this.setState({
                 isLoading: false,
                 details: response.data
             })
-            console.log(this.state.details)
         })
         .catch((error) => {
             console.log('error', error)
@@ -59,6 +58,17 @@ class ProfileDetails extends Component {
                     <View>
                         <Text style={styles.textResults}>{this.state.details.first_name} {this.state.details.last_name}</Text>
                         <Text style={styles.textResults}>{this.state.details.email}</Text>
+                        <FlatList
+                        data={this.state.details.favourite_locations}
+                        renderItem={({item})=> (
+                            <View style={styles.favourite_locations_container}>
+                                <Text style={styles.favouriteTitle}>Favourite Locations</Text>
+                                <Text style={styles.textResults}>{item.location_name} : {item.location_town}</Text>
+                            </View>
+                        )}
+                        ItemSeparatorComponent={() => <Divider style={locationStyles.divider} />}
+                        keyExtractor={(item,index) => item.location_id.toString()}
+                        />
                     </View>
                 </View>
             )
@@ -70,18 +80,30 @@ const styles = StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: '#967259',
-      paddingLeft: 5
+      paddingLeft: 5,
+      paddingRight: 5
+    },
+    favourite_locations_container: {
+        backgroundColor: "#38220f",
+        marginTop: 10,
     },
     title:{
         fontWeight:"bold",
         fontSize:50,
         color:"#ece0d1",
         marginBottom:40
-      },
-      textResults: {
+    },
+    favouriteTitle: {
+        color:"#ece0d1",
+        fontSize:30,
+        borderBottomWidth: 5,
+        borderBottomColor: "#ece0d1",
+        marginBottom: 5,
+    },
+    textResults: {
         fontSize:20,
         color:"white"
-    }
+    },
   });
 
 export default ProfileDetails;
