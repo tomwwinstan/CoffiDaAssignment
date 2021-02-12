@@ -1,5 +1,5 @@
 import  React, { Component } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, FlatList } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator, FlatList, TouchableOpacity } from 'react-native';
 import { Divider } from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
@@ -45,6 +45,23 @@ class ProfileDetails extends Component {
         })
     }
 
+    logout = () => {
+        axios.post('http://10.0.2.2:3333/api/1.0.0/user/logout', {}, { headers: {
+            "X-Authorization": this.state.authKey }
+        })
+        .then((response) => {
+            console.log('Logged out')
+            this.move()
+        }, (error => {
+            console.log(error)
+        }))
+    }
+
+    move = () => {
+        const navigation = this.props.navigation;
+        navigation.navigate('Login')
+    }
+
     render() {
         if(this.state.isLoading) {
             return (
@@ -67,8 +84,12 @@ class ProfileDetails extends Component {
                                 <Text style={styles.textResults}>{item.location_name} : {item.location_town}</Text>
                             </View>
                         )}
+                        ItemSeparatorComponent={() => <Divider style={styles.divider} />}
                         keyExtractor={(item,index) => item.location_id.toString()}
                         />
+                        <TouchableOpacity onPress={this.logout} style={styles.logout_btn}>
+                            <Text style={styles.logout_text}>Log Out</Text>
+                        </TouchableOpacity>
                     </View>
                 </View>
             )
@@ -87,11 +108,29 @@ const styles = StyleSheet.create({
         backgroundColor: "#38220f",
         marginTop: 10,
     },
+    divider: {
+        padding: 10,
+        backgroundColor: '#967259'
+    },
     title:{
         fontWeight:"bold",
         fontSize:50,
         color:"#ece0d1",
         marginBottom:40
+    },
+    logout_btn: {
+        backgroundColor:"#38220f",
+        borderRadius:20,
+        height:40,
+        padding: 10,
+        alignItems:"center",
+        justifyContent:"center",
+        marginTop: 20,
+        marginBottom:5
+    },
+    logout_text: {
+        color: 'white',
+        fontSize: 20,
     },
     favouriteTitle: {
         color:"#ece0d1",
