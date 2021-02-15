@@ -1,9 +1,11 @@
 import  React, { Component } from 'react';
 import { StyleSheet } from 'react-native';
-import Login from './Login';
 import { createStackNavigator } from '@react-navigation/stack';
+
+import Login from './Login';
 import SignUp from './SignUp';
 import ProfileDetails from './ProfileDetails';
+import UpdateDetails from './UpdateDetails';
 
 class Profile extends Component {
     render() {
@@ -15,6 +17,7 @@ class Profile extends Component {
                 <Stack.Screen name="Login" component={Login}></Stack.Screen>
                 <Stack.Screen name="SignUp" component={SignUp}></Stack.Screen>
                 <Stack.Screen name="ProfileDetails" component={ProfileDetails}></Stack.Screen>
+                <Stack.Screen name="UpdateDetails" component={UpdateDetails}></Stack.Screen>
             </Stack.Navigator>
         )
     }

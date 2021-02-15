@@ -51,15 +51,20 @@ class ProfileDetails extends Component {
         })
         .then((response) => {
             console.log('Logged out')
-            this.move()
+            this.login()
         }, (error => {
             console.log(error)
         }))
     }
 
-    move = () => {
+    login = () => {
         const navigation = this.props.navigation;
         navigation.navigate('Login')
+    }
+
+    updateDetails = () => {
+        const navigation = this.props.navigation;
+        navigation.navigate('UpdateDetails', {details: this.state.details})
     }
 
     render() {
@@ -76,6 +81,9 @@ class ProfileDetails extends Component {
                     <View>
                         <Text style={styles.textResults}>{this.state.details.first_name} {this.state.details.last_name}</Text>
                         <Text style={styles.textResults}>{this.state.details.email}</Text>
+                        <TouchableOpacity onPress={this.updateDetails} style={styles.logout_btn}>
+                            <Text style={styles.logout_text}>Update Details</Text>
+                        </TouchableOpacity>
                         <FlatList
                         data={this.state.details.favourite_locations}
                         renderItem={({item})=> (
