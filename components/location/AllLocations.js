@@ -61,7 +61,7 @@ class AllLocations extends Component {
                     <FlatList
                     data={this.state.locations}
                     renderItem={({item}) => (
-                            <Location data={item}/>
+                            <Location data={item} navigation={this.props.navigation}/>
                     )}
                     ItemSeparatorComponent={() => <Divider style={styles.divider} />}
                     keyExtractor={(item,index) => item.location_id.toString()}
