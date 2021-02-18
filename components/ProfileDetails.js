@@ -51,13 +51,13 @@ class ProfileDetails extends Component {
         })
         .then((response) => {
             console.log('Logged out')
-            this.login()
+            this.moveLogin()
         }, (error => {
             console.log(error)
         }))
     }
 
-    login = () => {
+    moveLogin = () => {
         const navigation = this.props.navigation;
         navigation.navigate('Login')
     }

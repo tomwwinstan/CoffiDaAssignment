@@ -1,8 +1,9 @@
 import  React, { Component } from 'react';
-import { StyleSheet } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import AllLocations from './location/AllLocations';
+import Location from './location/Location';
+import ViewLocation from './location/ViewLocation';
 
 class Home extends Component {
     render() {
@@ -11,23 +12,11 @@ class Home extends Component {
         return(
             <Stack.Navigator>
                 <Stack.Screen name="AllLocations" component={AllLocations}></Stack.Screen>
+                <Stack.Screen name="Location" component={Location}></Stack.Screen>
+                <Stack.Screen name="ViewLocation" component={ViewLocation}></Stack.Screen>
             </Stack.Navigator>
         )
     }
 }
-
-const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: '#967259',
-      justifyContent: 'center'
-    },
-    title:{
-        fontWeight:"bold",
-        fontSize:50,
-        color:"#ece0d1",
-        marginBottom:40
-      },
-  });
 
 export default Home;
