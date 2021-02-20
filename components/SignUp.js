@@ -42,11 +42,13 @@ class SignUp extends Component {
                 </View>
                 <View style={styles.inputView}>
                     <TextInput placeholder="Email"
+                        textContentType={"emailAddress"}
                         style={styles.inputText}
                         onChangeText={text => this.setState({email:text})}/>
                 </View>
                 <View style={styles.inputView}>
                     <TextInput placeholder="Password"
+                        textContentType={"newPassword"}
                         style={styles.inputText}
                         onChangeText={text => this.setState({password:text})}/>
                 </View>
