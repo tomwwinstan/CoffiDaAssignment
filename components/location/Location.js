@@ -32,27 +32,26 @@ class Location extends Component {
     }
 
     render() {
-
+        
         const navigation = this.props.navigation;
 
         return(
             <View style={locationStyles.location_container}>
-                <Text style={locationStyles.text_title}>{this.state.name}</Text>
-                <Text style={locationStyles.text_body}>{this.state.town}</Text>
-                <View style={{ flexDirection: "row" , justifyContent: 'space-evenly' }}>
-                    <TouchableOpacity style={locationStyles.likeBtn}
-                        onPress={() => likeLocation(this.state.authKey, this.state.id)}
-                    ><Text style={locationStyles.likeText}>Like</Text></TouchableOpacity>
-                    <TouchableOpacity style={locationStyles.likeBtn}
-                        onPress={() => unlikeLocation(this.state.authKey, this.state.id)}
-                    ><Text style={locationStyles.likeText}>UnLike</Text></TouchableOpacity>
-                </View>
-                <View>
-                    <Text>Average Rating  <Rating imageSize={20} readonly fractions={1} startingValue={this.state.avg_overall_rating}/></Text>
-                </View>
-                <TouchableOpacity style={locationStyles.likeBtn}
-                        onPress={() => navigation.navigate('ViewLocation')}
-                    ><Text style={locationStyles.likeText}>View Location</Text></TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.navigate('ViewLocation', {id: this.state.id}, {navigation: this.props.navigation})}>
+                    <Text style={locationStyles.text_title}>{this.state.name}</Text>
+                    <Text style={locationStyles.text_body}>{this.state.town}</Text>
+                    <View style={{ flexDirection: "row" , justifyContent: 'space-evenly' }}>
+                        <TouchableOpacity style={locationStyles.likeBtn}
+                            onPress={() => likeLocation(this.state.authKey, this.state.id)}
+                        ><Text style={locationStyles.likeText}>Like</Text></TouchableOpacity>
+                        <TouchableOpacity style={locationStyles.likeBtn}
+                            onPress={() => unlikeLocation(this.state.authKey, this.state.id)}
+                        ><Text style={locationStyles.likeText}>UnLike</Text></TouchableOpacity>
+                    </View>
+                    <View style={locationStyles.rating}>
+                        <Text style={locationStyles.ratingText}>Average Rating:  <Rating type='star' imageSize={25} readonly={true} fractions={2} startingValue={this.state.avg_overall_rating}/></Text>
+                    </View>
+                </TouchableOpacity>
             </View>
         )
     }
@@ -72,6 +71,7 @@ const locationStyles = StyleSheet.create({
     },
     text_body: {
         fontSize: 18,
+        color: "#38220f"
     },
     likeBtn:{
         width:"20%",
@@ -83,9 +83,30 @@ const locationStyles = StyleSheet.create({
         marginTop:10,
         marginBottom:5
       },
-      likeText:{
+    viewLocationBtn: {
+        width:"35%",
+        backgroundColor:"#38220f",
+        borderRadius:20,
+        height:30,
+        alignItems:"center",
+        justifyContent:"center",
+        marginTop:10,
+        marginBottom:5
+    },
+    likeText:{
         color:"white"
-      }
+      },
+    rating: {
+          backgroundColor: "white",
+          borderRadius: 10,
+          margin: 5
+      },
+    ratingText: {
+        color:"#38220f",
+        marginBottom: 5,
+        marginLeft:5,
+        fontSize: 15
+    }
 })
 
 export default Location;

@@ -70,10 +70,10 @@ class ProfileDetails extends Component {
     render() {
         if(this.state.isLoading) {
             return (
-                <View>
-                    <ActivityIndicator size="small" />
+                <View style={styles.container}>
+                    <ActivityIndicator size="large" color="#38220f" />
                 </View>
-            );
+            )
         } else {
             return(
                 <View style={styles.container}>
@@ -109,6 +109,7 @@ const styles = StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: '#967259',
+      justifyContent: 'center',
       paddingLeft: 5,
       paddingRight: 5
     },

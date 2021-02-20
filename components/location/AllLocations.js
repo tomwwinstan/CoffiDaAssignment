@@ -3,6 +3,7 @@ import { View, Text, ActivityIndicator, StyleSheet, FlatList } from 'react-nativ
 import { Divider } from 'react-native-elements';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import Location from './Location';
 
 class AllLocations extends Component {
@@ -11,7 +12,7 @@ class AllLocations extends Component {
     
         this.state = {
             authKey: '',
-            isLoading: false,
+            isLoading: true,
             locations:[],
             id: ""
         }
@@ -27,15 +28,14 @@ class AllLocations extends Component {
     }
 
     getAllLocations = () => {
-        this.setState({ isLoading:true });
         axios.get('http://10.0.2.2:3333/api/1.0.0/find', {headers: {
             'X-Authorization': this.state.authKey}
         })
         .then((response) => {
             console.log('Got location data')
             this.setState({
-                isLoading: false,
-                locations: response.data
+                locations: response.data,
+                isLoading: false
                 })
             })
         .catch((error) => {
@@ -50,8 +50,8 @@ class AllLocations extends Component {
     render() {
         if (this.state.isLoading) {
             return (
-                <View>
-                    <ActivityIndicator size="large" />
+                <View style={styles.container}>
+                    <ActivityIndicator size="large" color="#38220f" />
                 </View>
             )
         } else {
@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
         fontWeight:"bold",
         fontSize:50,
         color:"#ece0d1",
-        marginBottom:40
+        marginBottom:20
       },
     item: {
         padding: 20,

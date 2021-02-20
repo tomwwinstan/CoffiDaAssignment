@@ -43,11 +43,14 @@ class Login extends Component {
         source={require('../img/logo.png')} />
         <View style={styles.inputView}>
           <TextInput placeholder="Email"
+          textContentType={"emailAddress"}
           style={styles.inputText}
           onChangeText={text => this.setState({email:text})}/>
         </View>
         <View style={styles.inputView}>
           <TextInput placeholder="Password"
+          textContentType={"password"}
+          secureTextEntry={true}
           style={styles.inputText}
           onChangeText={text => this.setState({password:text})}/>
         </View>
