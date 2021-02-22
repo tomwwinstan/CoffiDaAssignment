@@ -4,6 +4,9 @@ import { Divider } from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
+import {getDetails} from './FindUserDetails.js';
+
+
 class ProfileDetails extends Component {
     constructor(props) {
         super(props);
@@ -11,6 +14,7 @@ class ProfileDetails extends Component {
         this.state = {
             isLoading: true,
             authKey: '',
+            isHidden: false,
             details: []
         }
       }
@@ -22,27 +26,15 @@ class ProfileDetails extends Component {
     getData = async() => {
         try {
             this.state.authKey = await AsyncStorage.getItem('@auth_key')
-            this.getDetails()
+            this.getUserDetails()
         } catch(e) {
             console.log(e)
         }
     }
     
-    getDetails = () => {
+    getUserDetails = async () => {
         const {id} = this.props.route.params
-        axios.get('http://10.0.2.2:3333/api/1.0.0/user/' + id, {headers: {
-            'X-Authorization': this.state.authKey}
-        })
-        .then((response) => {
-            console.log('Got personal details for id ' + id)
-            this.setState({
-                isLoading: false,
-                details: response.data
-            })
-        })
-        .catch((error) => {
-            console.log('error', error)
-        })
+        await getDetails(this.state.authKey, id).then(res => {this.setState({details: res.data, isLoading: false})})
     }
 
     logout = () => {

@@ -1,14 +1,15 @@
 import  React, { Component } from 'react';
 import { View, ScrollView, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
-import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { updateReview } from './EditDeleteReview';
 
-class AddReview extends Component {
+class UpdateReview extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
             authKey: '',
+            review_id: '',
             overall_rating: 0,
             price_rating: 0,
             quality_rating: 0,
@@ -17,77 +18,82 @@ class AddReview extends Component {
         }
     }
 
+    componentDidMount() {
+        this.getData()
+    }
+
     getData = async() => {
         try {
             this.state.authKey = await AsyncStorage.getItem('@auth_key')
+            this.buildDetails()
         } catch(e) {
             console.log(e)
         }
     }
 
-    componentDidMount() {
-        this.getData()
+    buildDetails() {
+        const review = this.props.route.params.review
+        this.setState({
+            review_id: review.review_id,
+            overall_rating: review.overall_rating,
+            price_rating: review.price_rating,
+            quality_rating: review.quality_rating,
+            clenliness_rating: review.clenliness_rating,
+            review_body: review.review_body
+        })
     }
 
-    addAReview = () => {
-        const {location_id} = this.props.route.params
-        axios.post('http://10.0.2.2:3333/api/1.0.0/location/' + location_id + '/review', 
-        {
-            overall_rating: parseInt(this.state.overall_rating),
-            price_rating: parseInt(this.state.price_rating),
-            quality_rating: parseInt(this.state.quality_rating),
-            clenliness_rating: parseInt(this.state.clenliness_rating),
-            review_body: this.state.review_body
-        }, 
-        { headers: { "X-Authorization": this.state.authKey }
-        })
-        .then((response) => {
-            console.log('Review created ' + response)
-        })
-        .catch((error) => {
-            console.log(error)
-        })
-    } 
+    update = () => {
+        console.log(this.props.route.params.loc_id)
+        updateReview(this.state.authKey, this.props.route.params.loc_id, this.state.review_id, this.state.overall_rating, this.state.price_rating, this.state.quality_rating, this.state.clenliness_rating, this.state.review_body)
+        const navigation = this.props.navigation;
+        navigation.navigate("ViewLocation", {id: this.props.location_id}, {navigation: this.props.navigation})
+    }
 
     render() {
         return(
             <ScrollView contentContainerStyle={{flexGrow: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#967259'}}> 
-                <Text style={styles.title}>Add a review</Text>
+                <Text style={styles.title}>Update review</Text>
                 <Text style={styles.userInfo}>Ratings must be between 1 and 5</Text>
                 <View style={styles.inputRatingView}>
                     <TextInput placeholder="Overall Rating"
                         style={styles.inputText}
                         keyboardType="number-pad"
+                        value={this.state.overall_rating.toString()}
                         onChangeText={text => this.setState({overall_rating:text})}/>
                 </View>
                 <View style={styles.inputRatingView}>
                     <TextInput placeholder="Price Rating"
                         style={styles.inputText}
                         keyboardType="number-pad"
+                        value={this.state.price_rating.toString()}
                         onChangeText={text => this.setState({price_rating:text})}/>
                 </View>
                 <View style={styles.inputRatingView}>
                     <TextInput placeholder="Quality Rating"
                         style={styles.inputText}
                         keyboardType="number-pad"
+                        value={this.state.quality_rating.toString()}
                         onChangeText={text => this.setState({quality_rating:text})}/>
                 </View>
                 <View style={styles.inputRatingView}>
                     <TextInput placeholder="Clenliness Rating"
                         style={styles.inputText}
                         keyboardType="number-pad"
+                        value={this.state.clenliness_rating.toString()}
                         onChangeText={text => this.setState({clenliness_rating:text})}/>
                 </View>
                 <View style={styles.inputReviewView}>
                     <TextInput placeholder="Review"
                         multiline
                         numberOfLines={5}
+                        value={this.state.review_body}
                         style={styles.inputReviewText}
                         onChangeText={text => this.setState({review_body:text})}/>
                 </View>
                 <TouchableOpacity style={styles.addReviewBtn}
-                                  onPress={this.addAReview}>
-                    <Text style={styles.loginText}>Add Review!</Text>
+                        onPress={() => this.update()}>
+                    <Text style={styles.loginText}>Update Review!</Text>
                 </TouchableOpacity>
             </ScrollView>
         )
@@ -134,7 +140,7 @@ const styles = StyleSheet.create({
         color:"#38220f"
       },
     inputReviewText: {
-        height:60,
+        height: 60,
         color:"#38220f"
     },
     addReviewBtn:{
@@ -152,4 +158,4 @@ const styles = StyleSheet.create({
       }
   });
 
-export default AddReview;
+export default UpdateReview;

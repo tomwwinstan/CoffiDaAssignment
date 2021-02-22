@@ -10,7 +10,7 @@ class Login extends Component {
     this.state = {
       email:"",
       password:"",
-      id: ""
+      id: ''
     }
   }
 
@@ -22,7 +22,7 @@ class Login extends Component {
       password: 'hello123'
     })
     .then((response) => {
-      storeData(response.data.token)
+      storeData(response.data.token, JSON.stringify(response.data.id))
       this.setState({ id:response.data.id })
       this.move()
     }, (error) => {
@@ -67,9 +67,10 @@ class Login extends Component {
   }
 }
 
-const storeData = async (auth) => {
+const storeData = async (auth, id) => {
   try {
     await AsyncStorage.setItem('@auth_key', auth)
+    await AsyncStorage.setItem('@id_key', id)
     console.log('Auth key stored')
   } catch (e) {
     console.log(e)

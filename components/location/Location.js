@@ -62,7 +62,9 @@ const locationStyles = StyleSheet.create({
     location_container: {
         flex: 1,
         backgroundColor: '#dbc1ac',
-        paddingLeft: 5
+        borderRadius:20,
+        paddingLeft: 5,
+        padding: 5
     },
     text_title: {
         fontWeight:"bold",

@@ -105,6 +105,10 @@ const styles = StyleSheet.create({
         fontSize:50,
         color:"#ece0d1"
       },
+    divider: {
+        padding: 5,
+        backgroundColor: '#967259'
+    },
     townText: {
         fontSize: 25,
         color:"#ece0d1"
