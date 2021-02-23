@@ -7,6 +7,7 @@ import ViewLocation from './location/ViewLocation';
 import Review from './location/review/Review';
 import AddReview from './location/review/AddReview';
 import UpdateReview from './location/review/UpdateReview';
+import TakePhoto from './location/review/photo/TakePhoto';
 
 class Home extends Component {
     render() {
@@ -20,6 +21,7 @@ class Home extends Component {
                 <Stack.Screen name="Review" component={Review}></Stack.Screen>
                 <Stack.Screen name="AddReview" component={AddReview}></Stack.Screen>
                 <Stack.Screen name="UpdateReview" component={UpdateReview}></Stack.Screen>
+                <Stack.Screen name="TakePhoto" component={TakePhoto}></Stack.Screen>
             </Stack.Navigator>
         )
     }
