@@ -6,10 +6,10 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 
 import Ionicons from 'react-native-vector-icons/Ionicons'
 
-import Home from './components/Home'
-import Search from './components/Search'
-import Camera from './components/Camera'
-import Profile from './components/Profile'
+import Home from './Home'
+import Search from './Search'
+import Camera from './Camera'
+import Profile from './Profile'
 
 const Tab = createBottomTabNavigator();
 

@@ -2,7 +2,7 @@ import  React, { Component } from 'react';
 import { View, ScrollView, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { handleError } from '../../ErrorHandling';
+import { handleError } from '../../../shared/ErrorHandling';
 
 class AddReview extends Component {
     constructor(props) {

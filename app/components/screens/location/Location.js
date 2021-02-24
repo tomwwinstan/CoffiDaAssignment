@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Rating } from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import {likeLocation} from './FavouriteLocation.js';
+import {likeLocation} from './FavouriteLocation';
 import {unlikeLocation} from './FavouriteLocation.js';
 
 class Location extends Component {

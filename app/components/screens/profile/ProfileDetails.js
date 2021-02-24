@@ -4,8 +4,8 @@ import { Divider } from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
-import {getDetails} from './FindUserDetails.js';
-import { handleError } from './ErrorHandling.js';
+import {getDetails} from '../../shared/FindUserDetails';
+import { handleError } from '../../shared/ErrorHandling';
 
 
 class ProfileDetails extends Component {
@@ -77,11 +77,11 @@ class ProfileDetails extends Component {
                         <TouchableOpacity onPress={this.updateDetails} style={styles.logout_btn}>
                             <Text style={styles.logout_text}>Update Details</Text>
                         </TouchableOpacity>
+                        <Text style={styles.favouriteTitle}>Favourite Locations</Text>
                         <FlatList
                         data={this.state.details.favourite_locations}
                         renderItem={({item})=> (
                             <View style={styles.favourite_locations_container}>
-                                <Text style={styles.favouriteTitle}>Favourite Locations</Text>
                                 <Text style={styles.textResults}>{item.location_name} : {item.location_town}</Text>
                             </View>
                         )}
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
         marginTop: 10,
     },
     divider: {
-        padding: 10,
+        padding: 5,
         backgroundColor: '#967259'
     },
     title:{

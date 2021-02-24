@@ -1,9 +1,9 @@
 import  React, { Component } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import Location from './location/Location';
-import ViewLocation from './location/ViewLocation';
-import SearchAllLocations from './Search/SearchAllLocations';
+import SearchAllLocations from '../components/screens/search/SearchAllLocations';
+import Location from '../components/screens/location/Location';
+import ViewLocation from '../components/screens/location/ViewLocation';
 
 class Search extends Component {
     render() {

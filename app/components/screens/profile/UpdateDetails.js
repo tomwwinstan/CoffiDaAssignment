@@ -2,8 +2,8 @@ import  React, { Component } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import { handleError } from './ErrorHandling';
-import { validateEmail, validatePassword } from './Validation';
+import { handleError } from '../../shared/ErrorHandling';
+import { validateEmail, validatePassword } from '../../shared/Validation';
 
 class UpdateDetails extends Component {
     constructor(props) {
