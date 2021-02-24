@@ -1,8 +1,8 @@
 import  React, { Component } from 'react';
 import { StyleSheet, ScrollView, View, TextInput, Text, TouchableOpacity, Alert } from 'react-native';
 import axios from 'axios';
-import { handleError } from './ErrorHandling';
-import { validateEmail, validatePassword } from './Validation';
+import { handleError } from '../../shared/ErrorHandling';
+import { validateEmail, validatePassword } from '../../shared/Validation';
 
 class SignUp extends Component {
     state = {

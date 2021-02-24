@@ -1,10 +1,10 @@
 import  React, { Component } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import Login from './Login';
-import SignUp from './SignUp';
-import ProfileDetails from './ProfileDetails';
-import UpdateDetails from './UpdateDetails';
+import Login from '../components/screens/profile/Login';
+import SignUp from '../components/screens/profile/SignUp';
+import ProfileDetails from '../components/screens/profile/ProfileDetails';
+import UpdateDetails from '../components/screens/profile/UpdateDetails';
 
 class Profile extends Component {
     render() {

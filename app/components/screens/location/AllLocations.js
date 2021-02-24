@@ -5,7 +5,7 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Location from './Location';
-import { handleError } from '../ErrorHandling';
+import { handleError } from '../../shared/ErrorHandling';
 
 class AllLocations extends Component {
     constructor(props) {

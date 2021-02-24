@@ -3,13 +3,13 @@ import { View, Text, StyleSheet, TouchableOpacity, Image, Dimensions, ActivityIn
 import { Rating } from 'react-native-ratings';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/FontAwesome';
-
-import {likeReview} from './FavouriteReview.js';
-import {unlikeReview} from './FavouriteReview.js';
-import {getDetails} from '../../FindUserDetails.js';
-import { deleteReview } from './EditDeleteReview.js';
 import axios from 'axios';
-import { handleError } from '../../ErrorHandling.js';
+
+import {likeReview} from './FavouriteReview';
+import {unlikeReview} from './FavouriteReview';
+import {getDetails} from '../../../shared/FindUserDetails';
+import { deleteReview } from './EditDeleteReview';
+import { handleError } from '../../../shared/ErrorHandling';
 
 const width = Dimensions.get('window').width;
 

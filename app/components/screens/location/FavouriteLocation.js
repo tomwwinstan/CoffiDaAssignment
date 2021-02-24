@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { handleError } from '../../shared/ErrorHandling';
 
 export function likeLocation(authKey, id) {
     axios.post('http://10.0.2.2:3333/api/1.0.0/location/' + id + '/favourite', { }, { headers: {
@@ -7,7 +8,7 @@ export function likeLocation(authKey, id) {
     .then((response) => {
         console.log('Location liked')
     }, (error) => {
-        console.log(error)
+        handleError(error)
     })
 }
 
@@ -18,6 +19,6 @@ export function unlikeLocation (authKey, id) {
     .then((response) => {
         console.log('Location un Liked')
     }, (error) => {
-        console.log(error)
+        handleError(error)
     })
 }

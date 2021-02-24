@@ -1,13 +1,13 @@
 import  React, { Component } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import AllLocations from './location/AllLocations';
-import Location from './location/Location';
-import ViewLocation from './location/ViewLocation';
-import Review from './location/review/Review';
-import AddReview from './location/review/AddReview';
-import UpdateReview from './location/review/UpdateReview';
-import TakePhoto from './location/review/photo/TakePhoto';
+import AllLocations from '../components/screens/location/AllLocations';
+import Location from '../components/screens/location/Location';
+import ViewLocation from '../components/screens/location/ViewLocation';
+import Review from '../components/screens/location/review/Review';
+import AddReview from '../components/screens/location/review/AddReview';
+import UpdateReview from '../components/screens/location/review/UpdateReview';
+import TakePhoto from '../components/screens/location/review/photo/TakePhoto';
 
 class Home extends Component {
     render() {

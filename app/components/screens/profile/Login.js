@@ -2,8 +2,8 @@ import  React, { Component } from 'react';
 import { StyleSheet, ScrollView, Text, TextInput, View, TouchableOpacity, Image, Alert } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { handleError } from './ErrorHandling';
-import { validateEmail } from './Validation';
+import { handleError } from '../../shared/ErrorHandling';
+import { validateEmail } from '../../shared/Validation';
 
 class Login extends Component {
   constructor(props) {
@@ -45,7 +45,7 @@ class Login extends Component {
     return (
       <ScrollView contentContainerStyle={{flexGrow: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#967259'}}>
         <Image style ={styles.logo}
-        source={require('../img/logo.png')} />
+        source={require('../../../assets/img/logo.png')} />
         <View style={styles.inputView}>
           <TextInput placeholder="Email"
           textContentType={"emailAddress"}

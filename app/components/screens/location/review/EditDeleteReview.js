@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { handleError } from '../../ErrorHandling';
+import { handleError } from '../../../shared/ErrorHandling';
 
 export function deleteReview(authKey, location_id, review_id) {
     axios.delete('http://10.0.2.2:3333/api/1.0.0/location/' + location_id + '/review/' + review_id, { headers: {
