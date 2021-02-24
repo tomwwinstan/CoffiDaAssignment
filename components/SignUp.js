@@ -1,6 +1,8 @@
 import  React, { Component } from 'react';
 import { StyleSheet, ScrollView, View, TextInput, Text, TouchableOpacity, Alert } from 'react-native';
 import axios from 'axios';
+import { handleError } from './ErrorHandling';
+import { validateEmail, validatePassword } from './Validation';
 
 class SignUp extends Component {
     state = {
@@ -11,20 +13,32 @@ class SignUp extends Component {
     }
 
     signUp = () => {
-        axios.post('http://10.0.2.2:3333/api/1.0.0/user', {
-        first_name: this.state.firstName,
-        last_name: this.state.lastName,
-        email: this.state.email,
-        password: this.state.password
-      })
-      .then((response) => {
-        console.log(response.data)
-        this.state.auth = response.data.token
-      }, (error) => {
-        console.log(error)
-        Alert.alert("Hello")
-      })
+      if(validateEmail(this.state.email)) {
+        if(validatePassword(this.state.password)) {
+          axios.post('http://10.0.2.2:3333/api/1.0.0/user', {
+            first_name: this.state.firstName,
+            last_name: this.state.lastName,
+            email: this.state.email,
+            password: this.state.password
+          })
+          .then((response) => {
+            console.log('User created')
+            this.moveLogin()
+          }, (error) => {
+            handleError(error)
+          })
+        } else {
+          Alert.alert('Invalid password', 'Password must have at least 6 characters, one lowercase and one uppercase')
+        }
+      } else {
+        Alert.alert('Invalid email address', this.state.email + ' is not the correct format for an email address')
+      }
     }
+
+    moveLogin = () => {
+      const navigation = this.props.navigation;
+      navigation.navigate('Login')
+  }
 
     render() {
         return (
@@ -49,6 +63,7 @@ class SignUp extends Component {
                 <View style={styles.inputView}>
                     <TextInput placeholder="Password"
                         textContentType={"newPassword"}
+                        secureTextEntry={true}
                         style={styles.inputText}
                         onChangeText={text => this.setState({password:text})}/>
                 </View>

@@ -6,6 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
 import Location from '../location/Location';
+import { handleError } from '../ErrorHandling';
 
 class SearchAllLocations extends Component {
     constructor(props) {
@@ -41,10 +42,8 @@ class SearchAllLocations extends Component {
     }
 
     searchAllLocations = () => {
-        console.log(this.state.searchRating)
         let url = this.buildSearch()
-        console.log(url)
-
+        
         axios.get(url, {headers: {
             'X-Authorization': this.state.authKey}
         })
@@ -56,7 +55,7 @@ class SearchAllLocations extends Component {
                 })
             })
         .catch((error) => {
-            console.log('ah' + error)
+            handleError(error)
         })
     }
 

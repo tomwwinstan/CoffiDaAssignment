@@ -44,7 +44,6 @@ class UpdateReview extends Component {
     }
 
     update = () => {
-        console.log(this.props.route.params.loc_id)
         updateReview(this.state.authKey, this.props.route.params.loc_id, this.state.review_id, this.state.overall_rating, this.state.price_rating, this.state.quality_rating, this.state.clenliness_rating, this.state.review_body)
         const navigation = this.props.navigation;
         navigation.navigate("ViewLocation", {id: this.props.location_id}, {navigation: this.props.navigation})

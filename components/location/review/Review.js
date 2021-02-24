@@ -9,6 +9,7 @@ import {unlikeReview} from './FavouriteReview.js';
 import {getDetails} from '../../FindUserDetails.js';
 import { deleteReview } from './EditDeleteReview.js';
 import axios from 'axios';
+import { handleError } from '../../ErrorHandling.js';
 
 const width = Dimensions.get('window').width;
 
@@ -74,13 +75,14 @@ class Review extends Component {
                         showPhoto: true,
                         photo: response.url
                     })
+                    console.log('Photo Available')
                 }
                 this.setState({
                     isLoding: false
                 })
             })
             .catch(error => {
-                console.log(error)
+                handleError(error)
             })
     }
     
@@ -93,7 +95,7 @@ class Review extends Component {
             .then((response) => {
                 console.log('Photo deleted')
             }, (error) => {
-                console.log(error)
+                handleError(error)
             })
     }
     

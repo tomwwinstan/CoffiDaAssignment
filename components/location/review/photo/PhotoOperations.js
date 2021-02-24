@@ -1,3 +1,5 @@
+import { handleError } from "../../../ErrorHandling";
+
 export function addPhotoForReview(authKey, location_id, review_id, photo) {
     fetch('http://10.0.2.2:3333/api/1.0.0/location/' + location_id + '/review/' + review_id + '/photo',
         {
@@ -12,6 +14,6 @@ export function addPhotoForReview(authKey, location_id, review_id, photo) {
             console.log('Image Uploaded')
           })
           .catch((error) => {
-            console.error(error);
+            handleError(error)
           });
 }

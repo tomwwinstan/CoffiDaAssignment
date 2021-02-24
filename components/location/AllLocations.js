@@ -5,6 +5,7 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Location from './Location';
+import { handleError } from '../ErrorHandling';
 
 class AllLocations extends Component {
     constructor(props) {
@@ -39,7 +40,7 @@ class AllLocations extends Component {
                 })
             })
         .catch((error) => {
-            console.log('ah' + error)
+            handleError(error, this.props.navigation)
         })
     }
 

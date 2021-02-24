@@ -1,7 +1,9 @@
 import  React, { Component } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import { handleError } from './ErrorHandling';
+import { validateEmail, validatePassword } from './Validation';
 
 class UpdateDetails extends Component {
     constructor(props) {
@@ -39,24 +41,33 @@ class UpdateDetails extends Component {
             first_name: details.first_name,
             last_name: details.last_name,
             email: details.email,
-            password: details.password
+            password: details.password,
+            changedPassword: false
         })
     }
 
     update = () => {
-        axios.patch('http://10.0.2.2:3333/api/1.0.0/user/' + this.state.id, {
+        if(validateEmail(this.state.email)) {
+            if(this.state.changedPassword) {
+                let passwordValid = validatePassword(this.state.password)
+            }
+            axios.patch('http://10.0.2.2:3333/api/1.0.0/user/' + this.state.id, {
             first_name: this.state.first_name,
             last_name: this.state.last_name,
             email: this.state.email,
             password: this.state.password
-        }, { headers: {
-            'X-Authorization': this.state.authKey}
-        })
-        .then((response) => {
-            this.move()
-        }, (error) => {
-            console.log(error)
-        })
+            }, { headers: {
+                'X-Authorization': this.state.authKey}
+            })
+            .then((response) => {
+                this.move()
+            }, (error) => {
+                handleError(error, this.props.navigation)
+            })
+        } else {
+            Alert.alert('Invalid email address', this.state.email + ' is not the correct format for an email address')
+        }
+        
     }
 
     move = () => {
@@ -78,7 +89,7 @@ class UpdateDetails extends Component {
                     <TextInput style={styles.text} value={this.state.email} onChangeText={text => this.setState({email:text})}></TextInput>
                 </View>
                 <View style={styles.inputView}>
-                    <TextInput style={styles.text} value={this.state.password} onChangeText={text => this.setState({password:text})}></TextInput>
+                    <TextInput style={styles.text} value={this.state.password}  onChangeText={text => this.setState({password:text, changedPassword:true})}></TextInput>
                 </View>
                 <TouchableOpacity style={styles.updateBtn} onPress={this.update}>
                     <Text style={styles.updateTxt}>Update</Text>

@@ -2,6 +2,7 @@ import  React, { Component } from 'react';
 import { View, ScrollView, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { handleError } from '../../ErrorHandling';
 
 class AddReview extends Component {
     constructor(props) {
@@ -45,7 +46,7 @@ class AddReview extends Component {
             console.log('Review created ' + response)
         })
         .catch((error) => {
-            console.log(error)
+            handleError(error)
         })
     } 
 
