@@ -5,7 +5,7 @@ export function likeLocation(authKey, id) {
         "X-Authorization": authKey } 
     })
     .then((response) => {
-        console.log(response + 'Location liked')
+        console.log('Location liked')
     }, (error) => {
         console.log(error)
     })
@@ -16,7 +16,7 @@ export function unlikeLocation (authKey, id) {
         'X-Authorization': authKey }
     })
     .then((response) => {
-        console.log(response + 'Location un Liked')
+        console.log('Location un Liked')
     }, (error) => {
         console.log(error)
     })

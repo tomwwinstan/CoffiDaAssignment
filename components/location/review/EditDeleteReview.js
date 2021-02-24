@@ -1,19 +1,18 @@
 import axios from 'axios';
+import { handleError } from '../../ErrorHandling';
 
 export function deleteReview(authKey, location_id, review_id) {
     axios.delete('http://10.0.2.2:3333/api/1.0.0/location/' + location_id + '/review/' + review_id, { headers: {
         "X-Authorization": authKey } 
     })
     .then((response) => {
-        console.log(response + ' Review deleted')
+        console.log('Review deleted')
     }, (error) => {
-        console.log(error)
+        handleError(error)
     })
 }
 
 export function updateReview( authKey, location_id, review_id, overall_rating, price_rating, quality_rating, clenliness_rating, review_body) {
-    console.log('hit')
-    console.log('val' + location_id + ' ' + review_id)
     axios.patch('http://10.0.2.2:3333/api/1.0.0/location/' + location_id + '/review/' + review_id, {
         overall_rating: parseInt(overall_rating),
         price_rating: parseInt(price_rating),
@@ -23,9 +22,9 @@ export function updateReview( authKey, location_id, review_id, overall_rating, p
     }, { headers: { 'X-Authorization': authKey }
     })
     .then((response) => {
-        console.log('Review updated ' + response)
+        console.log('Review updated')
     })
     .catch((error) => {
-        console.log(error)
+        handleError(error)
     })
 }

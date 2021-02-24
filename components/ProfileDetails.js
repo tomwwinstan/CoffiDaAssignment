@@ -5,6 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
 import {getDetails} from './FindUserDetails.js';
+import { handleError } from './ErrorHandling.js';
 
 
 class ProfileDetails extends Component {
@@ -45,7 +46,7 @@ class ProfileDetails extends Component {
             console.log('Logged out')
             this.moveLogin()
         }, (error => {
-            console.log(error)
+            handleError(error)
         }))
     }
 

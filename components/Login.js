@@ -1,33 +1,38 @@
 import  React, { Component } from 'react';
-import { StyleSheet, ScrollView, Text, TextInput, View, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, ScrollView, Text, TextInput, View, TouchableOpacity, Image, Alert } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { handleError } from './ErrorHandling';
+import { validateEmail } from './Validation';
 
 class Login extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      email:"",
-      password:"",
+      email: 'tomwin@mmu.ac.uk',
+      password: 'hello123',
       id: ''
     }
   }
 
   login = () => {
-    axios.post('http://10.0.2.2:3333/api/1.0.0/user/login', {
-      // email: this.state.email,
-      // password: this.state.password
-      email: 'tomwin@mmu.ac.uk',
-      password: 'hello123'
-    })
-    .then((response) => {
-      storeData(response.data.token, JSON.stringify(response.data.id))
-      this.setState({ id:response.data.id })
-      this.move()
-    }, (error) => {
-      console.log(error)
-    })
+    if(validateEmail(this.state.email)) {
+      axios.post('http://10.0.2.2:3333/api/1.0.0/user/login', {
+      email: this.state.email,
+      password: this.state.password
+      })
+      .then((response) => {
+        storeData(response.data.token, JSON.stringify(response.data.id))
+        this.setState({ id:response.data.id })
+        this.move()
+      }, (error) => {
+        handleError(error, this.props.navigation, true)
+      })
+    } else {
+      Alert.alert('Invalid email address', this.state.email + ' is not the correct format for an email address')
+    }
+    
   }
 
   move = () => {
