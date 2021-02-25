@@ -1,8 +1,10 @@
 import  React, { Component } from 'react';
-import { View, ScrollView, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
+import { View, ScrollView, Text, StyleSheet, TouchableOpacity, TextInput, Alert } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AirbnbRating } from 'react-native-ratings';
 import { handleError } from '../../../shared/ErrorHandling';
+import { validateReviewBody } from '../../../shared/Validation';
 
 class AddReview extends Component {
     constructor(props) {
@@ -32,52 +34,66 @@ class AddReview extends Component {
 
     addAReview = () => {
         const {location_id} = this.props.route.params
-        axios.post('http://10.0.2.2:3333/api/1.0.0/location/' + location_id + '/review', 
-        {
-            overall_rating: parseInt(this.state.overall_rating),
-            price_rating: parseInt(this.state.price_rating),
-            quality_rating: parseInt(this.state.quality_rating),
-            clenliness_rating: parseInt(this.state.clenliness_rating),
-            review_body: this.state.review_body
-        }, 
-        { headers: { "X-Authorization": this.state.authKey }
-        })
-        .then((response) => {
-            console.log('Review created ' + response)
-        })
-        .catch((error) => {
-            handleError(error)
-        })
+        if(validateReviewBody(this.state.review_body)) {
+            Alert.alert('Contains profanity')
+            } else {
+                axios.post('http://10.0.2.2:3333/api/1.0.0/location/' + location_id + '/review', {
+                overall_rating: parseInt(this.state.overall_rating),
+                price_rating: parseInt(this.state.price_rating),
+                quality_rating: parseInt(this.state.quality_rating),
+                clenliness_rating: parseInt(this.state.clenliness_rating),
+                review_body: this.state.review_body
+                }, 
+                { headers: { "X-Authorization": this.state.authKey }
+                })
+                .then((response) => {
+                    console.log('Review created ' + response)
+                })
+                .catch((error) => {
+                    handleError(error)
+                })
+        }
     } 
 
     render() {
         return(
             <ScrollView contentContainerStyle={{flexGrow: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#967259'}}> 
                 <Text style={styles.title}>Add a review</Text>
-                <Text style={styles.userInfo}>Ratings must be between 1 and 5</Text>
                 <View style={styles.inputRatingView}>
-                    <TextInput placeholder="Overall Rating"
-                        style={styles.inputText}
-                        keyboardType="number-pad"
-                        onChangeText={text => this.setState({overall_rating:text})}/>
+                    <Text style={styles.loginText}>Overall Rating:  <AirbnbRating
+                        count={5}
+                        defaultRating={0}
+                        onFinishRating={rating => this.setState({overall_rating: rating})}
+                        showRating={false}
+                        size={20}
+                    /></Text>
                 </View>
                 <View style={styles.inputRatingView}>
-                    <TextInput placeholder="Price Rating"
-                        style={styles.inputText}
-                        keyboardType="number-pad"
-                        onChangeText={text => this.setState({price_rating:text})}/>
+                    <Text style={styles.loginText}>Price Rating:  <AirbnbRating
+                        count={5}
+                        defaultRating={0}
+                        onFinishRating={rating => this.setState({price_rating: rating})}
+                        showRating={false}
+                        size={20}
+                    /></Text>
                 </View>
                 <View style={styles.inputRatingView}>
-                    <TextInput placeholder="Quality Rating"
-                        style={styles.inputText}
-                        keyboardType="number-pad"
-                        onChangeText={text => this.setState({quality_rating:text})}/>
+                    <Text style={styles.loginText}>Quality Rating:  <AirbnbRating
+                        count={5}
+                        defaultRating={0}
+                        onFinishRating={rating => this.setState({quality_rating: rating})}
+                        showRating={false}
+                        size={20}
+                    /></Text>
                 </View>
                 <View style={styles.inputRatingView}>
-                    <TextInput placeholder="Clenliness Rating"
-                        style={styles.inputText}
-                        keyboardType="number-pad"
-                        onChangeText={text => this.setState({clenliness_rating:text})}/>
+                    <Text style={styles.loginText}>Clenliness Rating:  <AirbnbRating
+                        count={5}
+                        defaultRating={0}
+                        onFinishRating={rating => this.setState({clenliness_rating: rating})}
+                        showRating={false}
+                        size={20}
+                    /></Text>
                 </View>
                 <View style={styles.inputReviewView}>
                     <TextInput placeholder="Review"
@@ -107,14 +123,14 @@ const styles = StyleSheet.create({
         color:"#ece0d1",
         marginBottom:10
       },
-      userInfo: {
+    userInfo: {
           fontSize: 20,
           color: "#dbc1ac",
           marginBottom: 5
       },
     inputRatingView:{
         width:"80%",
-        backgroundColor:"#dbc1ac",
+        backgroundColor:"#38220f",
         borderRadius:20,
         height:40,
         marginBottom:20,

@@ -9,8 +9,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {addPhotoForReview} from './PhotoOperations'
 
 const width = Dimensions.get('window').width;
-// const largeContainerSize = width / 2;
-// const largeImageSize = width / 4;
 
 class TakePhoto extends Component{
     constructor(props) {
@@ -41,9 +39,8 @@ class TakePhoto extends Component{
             quality: 0.5,
             aspect: [4, 3],
         });
-        console.log(result);
         if (!result.cancelled) {
-            this.setState({ uploadSource: result.uri });
+            this.setState({ uploadSource: result.uri, data: result });
         }
     };
 
@@ -54,9 +51,8 @@ class TakePhoto extends Component{
             quality: 0.5,
             aspect: [4, 3],
         });
-        console.log(result);
         if (!result.cancelled) {
-        this.setState({ uploadSource: result.uri, data: result });
+            this.setState({ uploadSource: result.uri, data: result });
         }
     };
 
@@ -140,7 +136,7 @@ const styles = StyleSheet.create({
     height: 70,
     backgroundColor: 'grey'
     },
-    })
+})
 
 
 export default TakePhoto;
