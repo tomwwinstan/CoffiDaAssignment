@@ -1,7 +1,9 @@
 import  React, { Component } from 'react';
-import { View, ScrollView, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
+import { View, ScrollView, Text, StyleSheet, TouchableOpacity, TextInput, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AirbnbRating } from 'react-native-ratings';
 import { updateReview } from './EditDeleteReview';
+import { validateReviewBody } from '../../../shared/Validation';
 
 class UpdateReview extends Component {
     constructor(props) {
@@ -44,43 +46,55 @@ class UpdateReview extends Component {
     }
 
     update = () => {
-        updateReview(this.state.authKey, this.props.route.params.loc_id, this.state.review_id, this.state.overall_rating, this.state.price_rating, this.state.quality_rating, this.state.clenliness_rating, this.state.review_body)
-        const navigation = this.props.navigation;
-        navigation.navigate("ViewLocation", {id: this.props.location_id}, {navigation: this.props.navigation})
+        if(validateReviewBody(this.state.review_body)) {
+            Alert.alert('Contains profanity')
+        } else {
+            updateReview(this.state.authKey, this.props.route.params.loc_id, this.state.review_id, this.state.overall_rating, this.state.price_rating, this.state.quality_rating, this.state.clenliness_rating, this.state.review_body)
+            const navigation = this.props.navigation;
+            navigation.navigate("ViewLocation", {id: this.props.location_id}, {navigation: this.props.navigation})
+        }
     }
 
     render() {
         return(
             <ScrollView contentContainerStyle={{flexGrow: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#967259'}}> 
                 <Text style={styles.title}>Update review</Text>
-                <Text style={styles.userInfo}>Ratings must be between 1 and 5</Text>
                 <View style={styles.inputRatingView}>
-                    <TextInput placeholder="Overall Rating"
-                        style={styles.inputText}
-                        keyboardType="number-pad"
-                        value={this.state.overall_rating.toString()}
-                        onChangeText={text => this.setState({overall_rating:text})}/>
+                    <Text style={styles.loginText}>Overall Rating:  <AirbnbRating
+                        count={5}
+                        defaultRating={this.state.overall_rating}
+                        onFinishRating={rating => this.setState({overall_rating: rating})}
+                        showRating={false}
+                        size={20}
+                    /></Text>
                 </View>
                 <View style={styles.inputRatingView}>
-                    <TextInput placeholder="Price Rating"
-                        style={styles.inputText}
-                        keyboardType="number-pad"
-                        value={this.state.price_rating.toString()}
-                        onChangeText={text => this.setState({price_rating:text})}/>
+                    <Text style={styles.loginText}>Price Rating:  <AirbnbRating
+                        count={5}
+                        defaultRating={this.state.price_rating}
+                        onFinishRating={rating => this.setState({price_rating: rating})}
+                        showRating={false}
+                        size={20}
+                    /></Text>
                 </View>
                 <View style={styles.inputRatingView}>
-                    <TextInput placeholder="Quality Rating"
-                        style={styles.inputText}
-                        keyboardType="number-pad"
-                        value={this.state.quality_rating.toString()}
-                        onChangeText={text => this.setState({quality_rating:text})}/>
+                    <Text style={styles.loginText}>Quality Rating:  <AirbnbRating
+                        count={5}
+                        defaultRating={this.state.quality_rating}
+                        onFinishRating={rating => this.setState({quality_rating: rating})}
+                        showRating={false}
+                        size={20}
+                    /></Text>
+                    
                 </View>
                 <View style={styles.inputRatingView}>
-                    <TextInput placeholder="Clenliness Rating"
-                        style={styles.inputText}
-                        keyboardType="number-pad"
-                        value={this.state.clenliness_rating.toString()}
-                        onChangeText={text => this.setState({clenliness_rating:text})}/>
+                    <Text style={styles.loginText}>Clenliness Rating:  <AirbnbRating
+                        count={5}
+                        defaultRating={this.state.clenliness_rating}
+                        onFinishRating={rating => this.setState({clenliness_rating: rating})}
+                        showRating={false}
+                        size={20}
+                    /></Text>
                 </View>
                 <View style={styles.inputReviewView}>
                     <TextInput placeholder="Review"
@@ -118,7 +132,7 @@ const styles = StyleSheet.create({
       },
     inputRatingView:{
         width:"80%",
-        backgroundColor:"#dbc1ac",
+        backgroundColor:"#38220f",
         borderRadius:20,
         height:40,
         marginBottom:20,
@@ -134,10 +148,6 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         padding:20
     },
-    inputText:{
-        height:50,
-        color:"#38220f"
-      },
     inputReviewText: {
         height: 60,
         color:"#38220f"

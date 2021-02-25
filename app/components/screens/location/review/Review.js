@@ -157,9 +157,11 @@ class Review extends Component {
                     }
               
                     <View style={{ flexDirection: "row" , justifyContent: 'space-evenly', marginTop: 5 }}>
+                        {  this.state.canEditReview &&
                         <TouchableOpacity style={styles.likeButtonBorder}
                             onPress={() => navigation.navigate("TakePhoto", {loc_id : this.props.location_id, review_id: this.state.review.review_id}, {navigation: this.props.navigation})}
                         ><Icon name={'photo'} size={25} color='#38220f'/></TouchableOpacity>
+                        }
                         { this.state.showPhoto && 
                         <TouchableOpacity style={styles.deleteButtonBorder}
                         onPress={() => this.deletePhotoForReview()}

@@ -1,7 +1,7 @@
 import  React, { Component } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, FlatList, TextInput } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, ActivityIndicator, TextInput, Alert } from 'react-native';
 import { Divider } from 'react-native-elements';
-import { Rating, AirbnbRating } from 'react-native-ratings';
+import { AirbnbRating } from 'react-native-ratings';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
@@ -18,7 +18,10 @@ class SearchAllLocations extends Component {
             locations:[],
             id: "",
             searchName: "",
-            searchRating: 0
+            overallRating: 0,
+            priceRating: 0,
+            qualityRating: 0,
+            clenlinessRating: 0
         }
     }
 
@@ -37,54 +40,103 @@ class SearchAllLocations extends Component {
     buildSearch() {
         let url = 'http://10.0.2.2:3333/api/1.0.0/find?q='
         url += this.state.searchName
-        url += '&overall_rating=' + this.state.searchRating
+        url += '&overall_rating=' + this.state.overallRating
+        url += '&price_rating=' + this.state.priceRating
+        url += '&quality_rating=' + this.state.qualityRating
+        url += '&clenliness_rating=' + this.state.clenlinessRating
         return url
+    }
+
+    resetSearch() {
+        this.setState({
+            searchName : '',
+            overallRating: 0,
+            priceRating: 0,
+            qualityRating: 0,
+            clenlinessRating: 0
+        })
     }
 
     searchAllLocations = () => {
         let url = this.buildSearch()
+        this.setState({isLoading: true})
         
         axios.get(url, {headers: {
             'X-Authorization': this.state.authKey}
         })
         .then((response) => {
             console.log('Got location data')
+            if(response.data.length === 0) {
+               Alert.alert('No results') 
+            }
             this.setState({
                 isLoading: false,
                 locations: response.data
                 })
+            this.resetSearch()
             })
         .catch((error) => {
-            handleError(error)
+            handleError(error, this.props.navigation)
         })
     }
 
     render() {
-        return(
-            <View style={styles.container}>
-                <Text style={styles.title}>Search Coffi Locations</Text>
-                <TextInput placeholder='Location Name' onChangeText={text => this.setState({searchName:text})}></TextInput>
-                <Text>Average Rating:  <AirbnbRating
-                    count={5}
-                    defaultRating={0}
-                    onFinishRating={rating => this.setState({searchRating: rating})}
-                    showRating={false}
-                    size={20}
-                /></Text>
-                <TouchableOpacity style={styles.likeBtn}
-                        onPress={() => this.searchAllLocations()}
-                    ><Text style={styles.likeText}>Search</Text>
-                </TouchableOpacity>
-                <FlatList
-                data={this.state.locations}
-                renderItem={({item}) => (
-                        <Location data={item} navigation={this.props.navigation}/>
-                )}
-                ItemSeparatorComponent={() => <Divider style={styles.divider} />}
-                keyExtractor={(item,index) => item.location_id.toString()}
-                />
-            </View>
-        )
+        if (this.state.isLoading) {
+            return (
+                <View style={styles.container}>
+                    <ActivityIndicator size="large" color="#38220f" />
+                </View>
+            )
+        } else {
+            return(
+                <View style={styles.container}>
+                    <Text style={styles.title}>Search Coffi Locations</Text>
+                    <TextInput placeholder='Location Name' onChangeText={text => this.setState({searchName:text})}></TextInput>
+                    <Text>Overall Rating: <AirbnbRating
+                        count={5}
+                        defaultRating={this.state.overallRating}
+                        onFinishRating={rating => this.setState({overallRating: rating})}
+                        showRating={false}
+                        size={14}
+                    />
+                    <Text>Price Rating: <AirbnbRating
+                        count={5}
+                        defaultRating={this.state.priceRating}
+                        onFinishRating={rating => this.setState({priceRating: rating})}
+                        showRating={false}
+                        size={14}
+                    /></Text>
+                    </Text>
+                    <Text>Quality Rating: <AirbnbRating
+                        count={5}
+                        defaultRating={this.state.qualityRating}
+                        onFinishRating={rating => this.setState({qualityRating: rating})}
+                        showRating={false}
+                        size={14}
+                    />
+                    <Text>Clenliness Rating: <AirbnbRating
+                        count={5}
+                        defaultRating={0}
+                        onFinishRating={rating => this.setState({clenlinessRating: rating})}
+                        showRating={false}
+                        size={14}
+                    /></Text>
+                    </Text>
+                    <TouchableOpacity style={styles.likeBtn}
+                            onPress={() => this.searchAllLocations()}
+                        ><Text style={styles.likeText}>Search</Text>
+                    </TouchableOpacity>
+                    <FlatList
+                    data={this.state.locations}
+                    renderItem={({item}) => (
+                            <Location data={item} navigation={this.props.navigation}/>
+                    )}
+                    ItemSeparatorComponent={() => <Divider style={styles.divider} />}
+                    keyExtractor={(item,index) => item.location_id.toString()}
+                    />
+                </View>
+            )
+        }
     }
 }
 
