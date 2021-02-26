@@ -44,7 +44,7 @@ class CoffiMap extends Component {
     }
 
     getAllLocations = async () => {
-        await findLocationsForGivenURL('http://10.0.2.2:3333/api/1.0.0/find', this.props.navigation).then(
+        await findLocationsForGivenURL('http://10.0.2.2:3333/api/1.0.0/find').then(
             res => {this.setState({
             locations: res.data })
         })
