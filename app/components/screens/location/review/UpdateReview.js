@@ -1,8 +1,8 @@
 import  React, { Component } from 'react';
 import { View, ScrollView, Text, StyleSheet, TouchableOpacity, TextInput, Alert } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AirbnbRating } from 'react-native-ratings';
-import { updateReview } from './EditDeleteReview';
+
+import { updateReview } from '../../../../api/ReviewOperations';
 import { validateReviewBody } from '../../../shared/Validation';
 
 class UpdateReview extends Component {
@@ -10,7 +10,6 @@ class UpdateReview extends Component {
         super(props);
 
         this.state = {
-            authKey: '',
             review_id: '',
             overall_rating: 0,
             price_rating: 0,
@@ -21,16 +20,7 @@ class UpdateReview extends Component {
     }
 
     componentDidMount() {
-        this.getData()
-    }
-
-    getData = async() => {
-        try {
-            this.state.authKey = await AsyncStorage.getItem('@auth_key')
-            this.buildDetails()
-        } catch(e) {
-            console.log(e)
-        }
+        this.buildDetails()
     }
 
     buildDetails() {
@@ -45,13 +35,24 @@ class UpdateReview extends Component {
         })
     }
 
-    update = () => {
+    buildReviewUpdate() {
+        return {
+            "overall_rating": this.state.overall_rating,
+            "price_rating": this.state.price_rating,
+            "quality_rating": this.state.quality_rating,
+            "clenliness_rating": this.state.clenliness_rating,
+            "review_body": this.state.review_body
+        }
+      }
+
+    update = async () => {
         if(validateReviewBody(this.state.review_body)) {
             Alert.alert('Contains profanity')
         } else {
-            updateReview(this.state.authKey, this.props.route.params.loc_id, this.state.review_id, this.state.overall_rating, this.state.price_rating, this.state.quality_rating, this.state.clenliness_rating, this.state.review_body)
+            const location_id = this.props.route.params.loc_id
+            await updateReview(location_id, this.state.review_id, this.buildReviewUpdate())
             const navigation = this.props.navigation;
-            navigation.navigate("ViewLocation", {id: this.props.location_id}, {navigation: this.props.navigation})
+            navigation.navigate("ViewLocation", {id: location_id})
         }
     }
 

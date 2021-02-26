@@ -1,12 +1,8 @@
 import  React, { Component } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, FlatList, TouchableOpacity } from 'react-native';
 import { Divider } from 'react-native-elements';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
 
-import {getDetails} from '../../shared/FindUserDetails';
-import { handleError } from '../../shared/ErrorHandling';
-
+import { logOut, getDetails } from '../../../api/ProfileOperations';
 
 class ProfileDetails extends Component {
     constructor(props) {
@@ -14,43 +10,26 @@ class ProfileDetails extends Component {
     
         this.state = {
             isLoading: true,
-            authKey: '',
             isHidden: false,
             details: []
         }
       }
-
+    
     componentDidMount() {
-        this.getData();
-    }
-
-    getData = async() => {
-        try {
-            this.state.authKey = await AsyncStorage.getItem('@auth_key')
-            this.getUserDetails()
-        } catch(e) {
-            console.log(e)
-        }
+        this._onFocusListener = this.props.navigation.addListener('focus', () => {
+            this.getUserDetails();
+          });
+        this._onFocusListener = this.props.navigation.addListener('tabPress', () => {
+            this.getUserDetails();
+        })
     }
     
     getUserDetails = async () => {
-        const {id} = this.props.route.params
-        await getDetails(this.state.authKey, id).then(res => {this.setState({details: res.data, isLoading: false})})
+        await getDetails().then(res => {this.setState({details: res.data, isLoading: false})})
     }
 
-    logout = () => {
-        axios.post('http://10.0.2.2:3333/api/1.0.0/user/logout', {}, { headers: {
-            "X-Authorization": this.state.authKey }
-        })
-        .then((response) => {
-            console.log('Logged out')
-            this.moveLogin()
-        }, (error => {
-            handleError(error)
-        }))
-    }
-
-    moveLogin = () => {
+    logout = async () => {
+        await logOut()
         const navigation = this.props.navigation;
         navigation.navigate('Login')
     }

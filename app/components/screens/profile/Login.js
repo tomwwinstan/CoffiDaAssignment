@@ -1,9 +1,8 @@
 import  React, { Component } from 'react';
 import { StyleSheet, ScrollView, Text, TextInput, View, TouchableOpacity, Image, Alert } from 'react-native';
-import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { handleError } from '../../shared/ErrorHandling';
+
 import { validateEmail } from '../../shared/Validation';
+import { logIn } from '../../../api/ProfileOperations';
 
 class Login extends Component {
   constructor(props) {
@@ -12,32 +11,18 @@ class Login extends Component {
     this.state = {
       email: 'tomwin@mmu.ac.uk',
       password: 'hello123',
-      id: ''
     }
   }
 
-  login = () => {
+  login = async () => {
     if(validateEmail(this.state.email)) {
-      axios.post('http://10.0.2.2:3333/api/1.0.0/user/login', {
-      email: this.state.email,
-      password: this.state.password
-      })
-      .then((response) => {
-        storeData(response.data.token, JSON.stringify(response.data.id))
-        this.setState({ id:response.data.id })
-        this.move()
-      }, (error) => {
-        handleError(error, this.props.navigation, true)
-      })
+      await logIn(this.state.email, this.state.password)
+      const navigation = this.props.navigation;
+      navigation.navigate('ProfileDetails')
     } else {
       Alert.alert('Invalid email address', this.state.email + ' is not the correct format for an email address')
     }
     
-  }
-
-  move = () => {
-    const navigation = this.props.navigation;
-    navigation.navigate('ProfileDetails', {id: this.state.id})
   }
 
   render() {
@@ -69,16 +54,6 @@ class Login extends Component {
         </TouchableOpacity>
       </ScrollView>
       )
-  }
-}
-
-const storeData = async (auth, id) => {
-  try {
-    await AsyncStorage.setItem('@auth_key', auth)
-    await AsyncStorage.setItem('@id_key', id)
-    console.log('Auth key stored')
-  } catch (e) {
-    console.log(e)
   }
 }
 

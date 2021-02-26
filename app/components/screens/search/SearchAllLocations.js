@@ -2,38 +2,22 @@ import  React, { Component } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, FlatList, ActivityIndicator, TextInput, Alert } from 'react-native';
 import { Divider } from 'react-native-elements';
 import { AirbnbRating } from 'react-native-ratings';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
 
 import Location from '../location/Location';
-import { handleError } from '../../shared/ErrorHandling';
+import { findLocationsForGivenURL } from '../../../api/LocationOperations';
 
 class SearchAllLocations extends Component {
     constructor(props) {
         super(props);
     
         this.state = {
-            authKey: '',
             isLoading: false,
             locations:[],
-            id: "",
             searchName: "",
             overallRating: 0,
             priceRating: 0,
             qualityRating: 0,
             clenlinessRating: 0
-        }
-    }
-
-    componentDidMount() {
-        this.getData()
-    }
-
-    getData = async() => {
-        try {
-            this.state.authKey = await AsyncStorage.getItem('@auth_key')
-        } catch(e) {
-            console.log(e)
         }
     }
     
@@ -57,27 +41,11 @@ class SearchAllLocations extends Component {
         })
     }
 
-    searchAllLocations = () => {
+    searchAllLocations = async () => {
         let url = this.buildSearch()
         this.setState({isLoading: true})
-        
-        axios.get(url, {headers: {
-            'X-Authorization': this.state.authKey}
-        })
-        .then((response) => {
-            console.log('Got location data')
-            if(response.data.length === 0) {
-               Alert.alert('No results') 
-            }
-            this.setState({
-                isLoading: false,
-                locations: response.data
-                })
-            this.resetSearch()
-            })
-        .catch((error) => {
-            handleError(error, this.props.navigation)
-        })
+        await findLocationsForGivenURL(url).then(res => {this.setState({locations: res.data, isLoading: false})})
+        this.resetSearch()
     }
 
     render() {

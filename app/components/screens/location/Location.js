@@ -1,10 +1,8 @@
 import  React, { Component } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Rating } from 'react-native-elements';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import {likeLocation} from './FavouriteLocation';
-import {unlikeLocation} from './FavouriteLocation.js';
+import {likeLocation, unlikeLocation} from '../../../api/LocationOperations'
 
 class Location extends Component {
     constructor(props) {
@@ -14,21 +12,8 @@ class Location extends Component {
             id: props.data.location_id,
             name: props.data.location_name,
             town: props.data.location_town,
-            avg_overall_rating: props.data.avg_overall_rating,
-            authKey: ''
+            avg_overall_rating: props.data.avg_overall_rating
         }
-    }
-
-    getData = async() => {
-        try {
-            this.state.authKey = await AsyncStorage.getItem('@auth_key')
-        } catch(e) {
-            console.log(e)
-        }
-    }
-
-    componentDidMount() {
-        this.getData()
     }
 
     render() {
@@ -42,10 +27,10 @@ class Location extends Component {
                     <Text style={locationStyles.text_body}>{this.state.town}</Text>
                     <View style={{ flexDirection: "row" , justifyContent: 'space-evenly' }}>
                         <TouchableOpacity style={locationStyles.likeBtn}
-                            onPress={() => likeLocation(this.state.authKey, this.state.id)}
+                            onPress={() => likeLocation(this.state.id)}
                         ><Text style={locationStyles.likeText}>Like</Text></TouchableOpacity>
                         <TouchableOpacity style={locationStyles.likeBtn}
-                            onPress={() => unlikeLocation(this.state.authKey, this.state.id)}
+                            onPress={() => unlikeLocation(this.state.id)}
                         ><Text style={locationStyles.likeText}>UnLike</Text></TouchableOpacity>
                     </View>
                     <View style={locationStyles.rating}>

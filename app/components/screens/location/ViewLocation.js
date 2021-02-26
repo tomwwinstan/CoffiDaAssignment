@@ -1,18 +1,16 @@
 import  React, { Component } from 'react';
-import { View, Text, StyleSheet, ScrollView, FlatList, ActivityIndicator, TouchableOpacity } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { View, Text, StyleSheet, FlatList, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { Divider } from 'react-native-elements';
 import { Rating } from 'react-native-ratings';
-import axios from 'axios';
 
 import Review from './review/Review'
+import { findLocationById } from '../../../api/LocationOperations';
 
 class ViewLocation extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            authKey: '',
             location: [],
             isLoading: true,
             location_id: ''
@@ -20,33 +18,16 @@ class ViewLocation extends Component {
     }
 
     componentDidMount() {
-        this.getData();
+        this._onFocusListener = this.props.navigation.addListener('focus', () => {
+            this.getLocation();
+          });
     }
 
-    getData = async() => {
-        try {
-            this.state.authKey = await AsyncStorage.getItem('@auth_key')
-            this.getLocation()
-        } catch(e) {
-            console.log(e)
-        }
-    }
-
-    getLocation = () => {
+    getLocation = async () => {
         const {id} = this.props.route.params
-        axios.get('http://10.0.2.2:3333/api/1.0.0/location/' + id, { headers: {
-            'X-Authorization': this.state.authKey }
-        })
-        .then((response) => {
-            this.setState({
-                location: response.data,
-                isLoading: false,
-                location_id: response.data.location_id
-            })
-        })
-        .catch((error) => {
-            console.log('error ' + error)
-        })
+        await findLocationById(id).then(res => {this.setState({location: res.data, 
+            isLoading: false, 
+            location_id: res.data.location_id})})
     }
 
     render() {
@@ -77,7 +58,7 @@ class ViewLocation extends Component {
                     <FlatList
                     data={this.state.location.location_reviews}
                     renderItem={({item}) => (
-                        <Review data={item} navigation={this.props.navigation} location_id={this.state.location_id}/>
+                        <Review data={item} navigation={navigation} location_id={this.state.location_id}/>
                     )}
                     ItemSeparatorComponent={() => <Divider style={styles.divider} />}
                     keyExtractor={(item,index) => item.review_id.toString()}
