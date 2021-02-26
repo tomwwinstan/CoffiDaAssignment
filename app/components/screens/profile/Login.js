@@ -14,15 +14,20 @@ class Login extends Component {
     }
   }
 
+  resetDetails() {
+    this.setState({
+      email: '',
+      password: ''
+    })
+  }
+
   login = async () => {
     if(validateEmail(this.state.email)) {
-      await logIn(this.state.email, this.state.password)
-      const navigation = this.props.navigation;
-      navigation.navigate('ProfileDetails')
+      await logIn(this.state.email, this.state.password, this.props.navigation)
+      this.resetDetails()
     } else {
       Alert.alert('Invalid email address', this.state.email + ' is not the correct format for an email address')
     }
-    
   }
 
   render() {

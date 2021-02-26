@@ -8,7 +8,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 
 import Home from './Home'
 import Search from './Search'
-import Camera from './Camera'
+import Map from './Map'
 import Profile from './Profile'
 
 const Tab = createBottomTabNavigator();
@@ -26,8 +26,8 @@ export default function AppNav() {
                     iconName = focused ? 'home' : 'home-outline';
                 } else if (route.name === 'Search') {
                     iconName = focused ? 'search' : 'search-outline';
-                } else if (route.name === 'Camera') {
-                    iconName = focused ? 'camera' : 'camera-outline';
+                } else if (route.name === 'Map') {
+                    iconName = focused ? 'location' : 'location-outline';
                 } else if (route.name === 'Profile') {
                     iconName = focused ? 'man' : 'man-outline';
                 }
@@ -42,7 +42,7 @@ export default function AppNav() {
       >
           <Tab.Screen name ="Home" component={Home}/>
           <Tab.Screen name ="Search" component={Search}/>
-          <Tab.Screen name ="Camera" component={Camera}/>
+          <Tab.Screen name ="Map" component={Map}/>
           <Tab.Screen name ="Profile" component={Profile}/>
       </Tab.Navigator>
     </NavigationContainer>

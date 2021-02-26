@@ -43,8 +43,13 @@ class SearchAllLocations extends Component {
 
     searchAllLocations = async () => {
         let url = this.buildSearch()
-        this.setState({isLoading: true})
-        await findLocationsForGivenURL(url).then(res => {this.setState({locations: res.data, isLoading: false})})
+        await findLocationsForGivenURL(url, this.props.navigation).then(res => {
+            if(res == undefined) {
+                Alert.alert('No results')
+            } else {
+                this.setState({locations: res.data, isLoading: false})
+            }
+        })
         this.resetSearch()
     }
 
@@ -60,34 +65,34 @@ class SearchAllLocations extends Component {
                 <View style={styles.container}>
                     <Text style={styles.title}>Search Coffi Locations</Text>
                     <TextInput placeholder='Location Name' onChangeText={text => this.setState({searchName:text})}></TextInput>
-                    <Text>Overall Rating: <AirbnbRating
+                    <Text>Overall Rating:<AirbnbRating
                         count={5}
                         defaultRating={this.state.overallRating}
                         onFinishRating={rating => this.setState({overallRating: rating})}
                         showRating={false}
-                        size={14}
+                        size={12}
                     />
-                    <Text>Price Rating: <AirbnbRating
+                    <Text>Price Rating:<AirbnbRating
                         count={5}
                         defaultRating={this.state.priceRating}
                         onFinishRating={rating => this.setState({priceRating: rating})}
                         showRating={false}
-                        size={14}
+                        size={12}
                     /></Text>
                     </Text>
-                    <Text>Quality Rating: <AirbnbRating
+                    <Text>Quality Rating:<AirbnbRating
                         count={5}
                         defaultRating={this.state.qualityRating}
                         onFinishRating={rating => this.setState({qualityRating: rating})}
                         showRating={false}
-                        size={14}
+                        size={12}
                     />
-                    <Text>Clenliness Rating: <AirbnbRating
+                    <Text>Clenliness Rating:<AirbnbRating
                         count={5}
                         defaultRating={0}
                         onFinishRating={rating => this.setState({clenlinessRating: rating})}
                         showRating={false}
-                        size={14}
+                        size={12}
                     /></Text>
                     </Text>
                     <TouchableOpacity style={styles.likeBtn}

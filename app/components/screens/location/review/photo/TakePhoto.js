@@ -72,6 +72,8 @@ class TakePhoto extends Component{
         const {loc_id} = this.props.route.params
         const {review_id} = this.props.route.params
         await addPhotoForReview(loc_id, review_id, this.state.data)
+        const navigation = this.props.navigation;
+        navigation.navigate('ViewLocation', {id: loc_id})
     }
 
     render() {

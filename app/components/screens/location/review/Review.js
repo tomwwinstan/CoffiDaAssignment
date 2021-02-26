@@ -121,7 +121,7 @@ class Review extends Component {
                             onPress={() => navigation.navigate("TakePhoto", {loc_id : this.props.location_id, review_id: this.state.review.review_id}, {navigation: this.props.navigation})}
                         ><Icon name={'photo'} size={25} color='#38220f'/></TouchableOpacity>
                         }
-                        { this.state.showPhoto && 
+                        { this.state.canEditReview && this.state.showPhoto && 
                         <TouchableOpacity style={styles.deleteButtonBorder}
                         onPress={() => this.deletePhoto()}
                         ><Icon name={'trash'} size={25} color='white'/></TouchableOpacity>

@@ -3,13 +3,13 @@ import { handleError } from '../components/shared/ErrorHandling';
 import { getToken } from '../components/shared/AuthToken';
 import { Alert } from "react-native";
 
-export async function findLocationsForGivenURL(url) {
+export async function findLocationsForGivenURL(url, navigation) {
     const authKey = await getToken()
     let response =  await axios.get(url, {headers: {
             'X-Authorization': authKey}
         })
         .catch((error) => {
-            handleError(error)
+            handleError(error, navigation)
         })
     return response
 }
