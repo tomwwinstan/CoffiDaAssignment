@@ -25,7 +25,12 @@ class AllLocations extends Component {
     }
 
     getAllLocations = async () => {
-        await findLocationsForGivenURL('http://10.0.2.2:3333/api/1.0.0/find').then(res => {this.setState({locations: res.data, isLoading: false})})
+        await findLocationsForGivenURL('http://10.0.2.2:3333/api/1.0.0/find', this.props.navigation).then(res => {
+            if(res == undefined) {
+            } else {
+                this.setState({locations: res.data, isLoading: false})
+            }    
+        })
     }
 
     render() {

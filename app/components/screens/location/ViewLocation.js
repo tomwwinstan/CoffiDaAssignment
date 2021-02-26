@@ -19,6 +19,7 @@ class ViewLocation extends Component {
 
     componentDidMount() {
         this._onFocusListener = this.props.navigation.addListener('focus', () => {
+            this.setState({isLoading: true})
             this.getLocation();
           });
     }

@@ -25,7 +25,7 @@ class ProfileDetails extends Component {
     }
     
     getUserDetails = async () => {
-        await getDetails().then(res => {this.setState({details: res.data, isLoading: false})})
+        await getDetails(this.props.navigation).then(res => {this.setState({details: res.data, isLoading: false})})
     }
 
     logout = async () => {

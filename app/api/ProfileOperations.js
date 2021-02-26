@@ -1,28 +1,29 @@
 import axios from 'axios';
-import { handleError } from '../components/shared/ErrorHandling';
+import { handleError, handleLoginError } from '../components/shared/ErrorHandling';
 import { getToken, removeTokenAndID, getUserId, storeToken } from '../components/shared/AuthToken';
 
-export async function logIn(email, password) {
+export async function logIn(email, password, navigation) {
     axios.post('http://10.0.2.2:3333/api/1.0.0/user/login', {
       email: email,
       password: password
       })
       .then(async (response) => {
         await storeToken(response.data.token, JSON.stringify(response.data.id))
+        navigation.navigate('ProfileDetails')
       })
       .catch((error) => {
-        handleError(error)
+        handleLoginError(error)
     })
 }
 
-export async function getDetails() {
+export async function getDetails(navigation) {
     const authKey = await getToken()
     const id = await getUserId()
     let response =  await axios.get('http://10.0.2.2:3333/api/1.0.0/user/' + id, {headers: {
         'X-Authorization': authKey }
     })
     .catch((error) => {
-        handleError(error)
+        handleError(error, navigation)
     })
     return response
 }
