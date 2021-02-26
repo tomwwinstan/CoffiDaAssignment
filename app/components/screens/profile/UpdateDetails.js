@@ -1,78 +1,55 @@
 import  React, { Component } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Alert } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
-import { handleError } from '../../shared/ErrorHandling';
+
 import { validateEmail, validatePassword } from '../../shared/Validation';
+import { updateUserDetails } from '../../../api/ProfileOperations';
 
 class UpdateDetails extends Component {
     constructor(props) {
         super(props);
     
         this.state = {
-            details: [],
             first_name: '',
             last_name: '',
             email: '',
-            password: '',
-            id: '',
-            authKey: '',
+            password: ''
         }
       }
 
     componentDidMount() {
-        this.getData()
-    }
-
-    getData = async() => {
-        try {
-            this.state.authKey = await AsyncStorage.getItem('@auth_key')
-            this.buildDetails()
-        } catch(e) {
-            console.log(e)
-        }
+        this.buildDetails()
     }
 
     buildDetails() {
-        const details = this.props.route.params.details
-        this.state.details = details
+        const user_details = this.props.route.params.details
         this.setState({
-            id: details.user_id,
-            first_name: details.first_name,
-            last_name: details.last_name,
-            email: details.email,
-            password: details.password,
-            changedPassword: false
+            first_name: user_details.first_name,
+            last_name: user_details.last_name,
+            email: user_details.email
         })
     }
 
-    update = () => {
-        if(validateEmail(this.state.email)) {
-            if(this.state.changedPassword) {
-                let passwordValid = validatePassword(this.state.password)
-            }
-            axios.patch('http://10.0.2.2:3333/api/1.0.0/user/' + this.state.id, {
-            first_name: this.state.first_name,
-            last_name: this.state.last_name,
-            email: this.state.email,
-            password: this.state.password
-            }, { headers: {
-                'X-Authorization': this.state.authKey}
-            })
-            .then((response) => {
-                this.move()
-            }, (error) => {
-                handleError(error, this.props.navigation)
-            })
-        } else {
-            Alert.alert('Invalid email address', this.state.email + ' is not the correct format for an email address')
+    buildUpdatedUser() {
+        return {
+            "first_name": this.state.first_name,
+            "last_name": this.state.last_name,
+            "email": this.state.email,
+            "password": this.state.password
         }
-        
     }
 
-    move = () => {
-        const navigation = this.props.navigation;
-        navigation.navigate('ProfileDetails', {id: this.state.id})
+    update = async() => {
+        if(validateEmail(this.state.email)) {
+            if(this.state.changedPassword) {
+                validatePassword(this.state.password)
+            }
+            await updateUserDetails(this.buildUpdatedUser())
+            const navigation = this.props.navigation;
+            navigation.navigate('ProfileDetails')
+        } else {
+            Alert.alert('Invalid email address ', this.state.email + ' is not the correct format for an email address')
+        }
+        
     }
 
     render() {
@@ -89,7 +66,7 @@ class UpdateDetails extends Component {
                     <TextInput style={styles.text} value={this.state.email} onChangeText={text => this.setState({email:text})}></TextInput>
                 </View>
                 <View style={styles.inputView}>
-                    <TextInput style={styles.text} value={this.state.password}  onChangeText={text => this.setState({password:text, changedPassword:true})}></TextInput>
+                    <TextInput style={styles.text} onChangeText={text => this.setState({password:text, changedPassword:true})}></TextInput>
                 </View>
                 <TouchableOpacity style={styles.updateBtn} onPress={this.update}>
                     <Text style={styles.updateTxt}>Update</Text>

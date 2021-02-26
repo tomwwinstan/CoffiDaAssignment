@@ -4,9 +4,8 @@ import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import {addPhotoForReview} from './PhotoOperations'
+import {addPhotoForReview, getPhotoForReview} from '../../../../../api/PhotoOperations'
 
 const width = Dimensions.get('window').width;
 
@@ -21,6 +20,7 @@ class TakePhoto extends Component{
 
     componentDidMount() {
         this.getPermissionAsync();
+        this.getPhoto()
     }
 
     getPermissionAsync = async () => {
@@ -30,6 +30,18 @@ class TakePhoto extends Component{
             alert('Sorry, we need camera roll permissions to make this work!');
             }
         }
+    }
+
+    getPhoto = async () => {
+        const {loc_id} = this.props.route.params
+        const {review_id} = this.props.route.params
+        getPhotoForReview(loc_id, review_id).then(res => {
+            if (res.status === 200) {
+                this.setState({
+                    uploadSource: res.url
+                })
+            }
+        })
     }
 
     selectImage = async () => {
@@ -57,11 +69,9 @@ class TakePhoto extends Component{
     };
 
     uploadImage = async () => {
-        console.log(this.props)
         const {loc_id} = this.props.route.params
         const {review_id} = this.props.route.params
-        const authKey = await AsyncStorage.getItem('@auth_key') 
-        addPhotoForReview(authKey, loc_id, review_id, this.state.data)
+        await addPhotoForReview(loc_id, review_id, this.state.data)
     }
 
     render() {

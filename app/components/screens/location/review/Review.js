@@ -1,15 +1,11 @@
 import  React, { Component } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, Dimensions, ActivityIndicator } from 'react-native';
 import { Rating } from 'react-native-ratings';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import axios from 'axios';
 
-import {likeReview} from './FavouriteReview';
-import {unlikeReview} from './FavouriteReview';
-import {getDetails} from '../../../shared/FindUserDetails';
-import { deleteReview } from './EditDeleteReview';
-import { handleError } from '../../../shared/ErrorHandling';
+import { getDetails } from '../../../../api/ProfileOperations';
+import { getPhotoForReview, deletePhotoForReview } from '../../../../api/PhotoOperations';
+import { likeReview, unlikeReview, deleteReview } from '../../../../api/ReviewOperations';
 
 const width = Dimensions.get('window').width;
 
@@ -20,38 +16,20 @@ class Review extends Component {
         this.state = {
             isLoding: true,
             review: props.data,
-            authKey: '',
-            user_id: '',
             reviews: [],
             canEditReview: false,
             showPhoto: false,
             photo: null
         }
     }
-
-    
-
-    getData = async () => {
-        try {
-            this.state.authKey = await AsyncStorage.getItem('@auth_key')
-            this.state.user_id = await AsyncStorage.getItem('@id_key')
-            this.checkIfUsersReview()
-        } catch (e) {
-            console.log(e)
-        }
-    }
     
     componentDidMount() {
-        this.getData()
-        this.getPhotoForReview()
+        this.checkIfUsersReview()
+        this.getPhoto()
     }
     
     checkIfUsersReview = async () => {
-        await getDetails(this.state.authKey, this.state.user_id).then(res => {
-            this.setState({
-                reviews: res.data.reviews
-            })
-        })
+        await getDetails().then(res => {this.setState({reviews: res.data.reviews})})
         this.state.reviews.map((item) => {
             if (JSON.stringify(this.state.review) === JSON.stringify(item.review)) {
                 this.setState({
@@ -61,42 +39,23 @@ class Review extends Component {
         })
     }
     
-    getPhotoForReview = () => {
-        fetch('http://10.0.2.2:3333/api/1.0.0/location/' + this.props.location_id + '/review/' + this.state.review.review_id + '/photo', {
-                method: 'GET',
-                headers: {
-                    "Content-Type": "image/jpeg",
-                    "X-Authorization": this.state.authKey
-                },
-            })
-            .then((response) => {
-                if (response.status === 200) {
-                    this.setState({
-                        showPhoto: true,
-                        photo: response.url
-                    })
-                    console.log('Photo Available')
-                }
+    getPhoto = async () => {
+        getPhotoForReview(this.props.location_id, this.state.review.review_id).then(res => {
+            if (res.status === 200) {
                 this.setState({
-                    isLoding: false
+                    showPhoto: true,
+                    photo: res.url
                 })
+            console.log('Photo Available')
+            }
+            this.setState({
+            isLoding: false
             })
-            .catch(error => {
-                handleError(error)
-            })
+        })
     }
     
-    deletePhotoForReview = () => {
-        axios.delete('http://10.0.2.2:3333/api/1.0.0/location/' + this.props.location_id + '/review/' + this.state.review.review_id + '/photo', {
-                headers: {
-                    'X-Authorization': this.state.authKey
-                }
-            })
-            .then((response) => {
-                console.log('Photo deleted')
-            }, (error) => {
-                handleError(error)
-            })
+    deletePhoto = () => {
+        deletePhotoForReview(this.props.location_id, this.state.review.review_id)
     }
     
     updateReview = () => {
@@ -129,7 +88,7 @@ class Review extends Component {
                             onPress={() => this.updateReview()}
                         ><Text style={styles.text}>Edit</Text></TouchableOpacity>
                         <TouchableOpacity style={[styles.likeBtn, styles.deleteBtn]}
-                            onPress={() => deleteReview(this.state.authKey, this.props.location_id, this.state.review.review_id)}
+                            onPress={() => deleteReview( this.props.location_id, this.state.review.review_id)}
                         ><Text style={styles.text}>Delete</Text></TouchableOpacity>
                     </View>
                     }
@@ -140,10 +99,10 @@ class Review extends Component {
                     <View style={{ flexDirection: "row" , justifyContent: 'space-evenly' }}>
                         <Text style={styles.likesText}>Likes: {this.state.review.likes}</Text>
                         <TouchableOpacity style={styles.likeButtonBorder}
-                            onPress={() => likeReview(this.state.authKey, this.props.location_id, this.state.review.review_id)}
+                            onPress={() => likeReview(this.props.location_id, this.state.review.review_id)}
                         ><Icon name={'thumbs-up'} size={25} color='#38220f'/></TouchableOpacity>
                         <TouchableOpacity style={styles.likeButtonBorder}
-                            onPress={() => unlikeReview(this.state.authKey, this.props.location_id, this.state.review.review_id)}
+                            onPress={() => unlikeReview(this.props.location_id, this.state.review.review_id)}
                         ><Icon name={'thumbs-down'} size={25} color='#38220f'/></TouchableOpacity>
                     </View>
     
@@ -164,7 +123,7 @@ class Review extends Component {
                         }
                         { this.state.showPhoto && 
                         <TouchableOpacity style={styles.deleteButtonBorder}
-                        onPress={() => this.deletePhotoForReview()}
+                        onPress={() => this.deletePhoto()}
                         ><Icon name={'trash'} size={25} color='white'/></TouchableOpacity>
                         }
                     </View> 

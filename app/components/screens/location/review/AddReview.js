@@ -1,17 +1,15 @@
 import  React, { Component } from 'react';
 import { View, ScrollView, Text, StyleSheet, TouchableOpacity, TextInput, Alert } from 'react-native';
-import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AirbnbRating } from 'react-native-ratings';
-import { handleError } from '../../../shared/ErrorHandling';
+
 import { validateReviewBody } from '../../../shared/Validation';
+import { addReviewToLocation } from '../../../../api/ReviewOperations';
 
 class AddReview extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            authKey: '',
             overall_rating: 0,
             price_rating: 0,
             quality_rating: 0,
@@ -20,40 +18,26 @@ class AddReview extends Component {
         }
     }
 
-    getData = async() => {
-        try {
-            this.state.authKey = await AsyncStorage.getItem('@auth_key')
-        } catch(e) {
-            console.log(e)
+    buildNewReview() {
+        return {
+            "overall_rating": this.state.overall_rating,
+            "price_rating": this.state.price_rating,
+            "quality_rating": this.state.quality_rating,
+            "clenliness_rating": this.state.clenliness_rating,
+            "review_body": this.state.review_body
         }
     }
 
-    componentDidMount() {
-        this.getData()
-    }
-
-    addAReview = () => {
-        const {location_id} = this.props.route.params
+    addAReview = async () => {
         if(validateReviewBody(this.state.review_body)) {
             Alert.alert('Contains profanity')
             } else {
-                axios.post('http://10.0.2.2:3333/api/1.0.0/location/' + location_id + '/review', {
-                overall_rating: parseInt(this.state.overall_rating),
-                price_rating: parseInt(this.state.price_rating),
-                quality_rating: parseInt(this.state.quality_rating),
-                clenliness_rating: parseInt(this.state.clenliness_rating),
-                review_body: this.state.review_body
-                }, 
-                { headers: { "X-Authorization": this.state.authKey }
-                })
-                .then((response) => {
-                    console.log('Review created ' + response)
-                })
-                .catch((error) => {
-                    handleError(error)
-                })
+                const {location_id} = this.props.route.params
+                await addReviewToLocation(location_id, this.buildNewReview())
+                const navigation = this.props.navigation;
+                navigation.navigate('ViewLocation', {id: location_id})
         }
-    } 
+    }
 
     render() {
         return(
@@ -103,7 +87,7 @@ class AddReview extends Component {
                         onChangeText={text => this.setState({review_body:text})}/>
                 </View>
                 <TouchableOpacity style={styles.addReviewBtn}
-                                  onPress={this.addAReview}>
+                                  onPress={() => this.addAReview()}>
                     <Text style={styles.loginText}>Add Review!</Text>
                 </TouchableOpacity>
             </ScrollView>

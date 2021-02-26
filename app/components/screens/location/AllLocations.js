@@ -1,51 +1,31 @@
 import  React, { Component } from 'react';
 import { View, Text, ActivityIndicator, StyleSheet, FlatList } from 'react-native';
 import { Divider } from 'react-native-elements';
-import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Location from './Location';
-import { handleError } from '../../shared/ErrorHandling';
+import { findLocationsForGivenURL } from '../../../api/LocationOperations';
 
 class AllLocations extends Component {
     constructor(props) {
         super(props);
     
         this.state = {
-            authKey: '',
             isLoading: true,
-            locations:[],
-            id: ""
+            locations:[]
         }
-    }
-
-    getData = async() => {
-        try {
-            this.state.authKey = await AsyncStorage.getItem('@auth_key')
-            this.getAllLocations()
-        } catch(e) {
-            console.log(e)
-        }
-    }
-
-    getAllLocations = () => {
-        axios.get('http://10.0.2.2:3333/api/1.0.0/find', {headers: {
-            'X-Authorization': this.state.authKey}
-        })
-        .then((response) => {
-            console.log('Got location data')
-            this.setState({
-                locations: response.data,
-                isLoading: false
-                })
-            })
-        .catch((error) => {
-            handleError(error, this.props.navigation)
-        })
     }
 
     componentDidMount() {
-        this.getData()
+        this._onFocusListener = this.props.navigation.addListener('focus', () => {
+            this.getAllLocations();
+          });
+        this._onFocusListener = this.props.navigation.addListener('tabPress', () => {
+            this.getAllLocations();
+        })
+    }
+
+    getAllLocations = async () => {
+        await findLocationsForGivenURL('http://10.0.2.2:3333/api/1.0.0/find').then(res => {this.setState({locations: res.data, isLoading: false})})
     }
 
     render() {
